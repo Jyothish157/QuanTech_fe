@@ -1,0 +1,111 @@
+<section class="page">
+  <h2>Shift Management</h2>
+
+  @if (isManager()) {
+    <div class="card">
+      <div class="card-title">Create New Shift</div>
+      <form class="form" (ngSubmit)="createShift()">
+        <label>
+          Employee ID
+          <input type="text" [(ngModel)]="newShift.employeeId" name="employeeId" required />
+        </label>
+        <label>
+          Date
+          <input type="date" [(ngModel)]="newShift.date" name="date" required />
+        </label>
+        <label>
+          Shift Time
+          <select [(ngModel)]="newShift.time" name="time" required>
+            <option>Morning</option>
+            <option>Evening</option>
+            <option>Night</option>
+          </select>
+        </label>
+        <button class="btn primary">Create Shift</button>
+      </form>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Swap Requests</div>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Employee</th>
+            <th>Date</th>
+            <th>From</th>
+            <th>To</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let req of swapRequests()">
+            <td>{{ req.employeeId }}</td>
+            <td>{{ req.date }}</td>
+            <td>{{ req.from }}</td>
+            <td>{{ req.to }}</td>
+            <td>{{ req.status }}</td>
+            <td>
+              @if (req.status === 'Pending') {
+                <button class="btn success" (click)="approveSwap(req.employeeId, req.date)">Approve</button>
+                <button class="btn danger" (click)="rejectSwap(req.employeeId, req.date)">Reject</button>
+              }
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  }
+
+  @if (!isManager()) {
+    <form class="form" (ngSubmit)="requestSwap()">
+      <label>
+        Date
+        <input type="date" [(ngModel)]="swap.date" name="date" required />
+      </label>
+      <label>
+        From Shift
+        <select [(ngModel)]="swap.from" name="from" required>
+          <option>Morning</option>
+          <option>Evening</option>
+          <option>Night</option>
+        </select>
+      </label>
+      <label>
+        To Shift
+        <select [(ngModel)]="swap.to" name="to" required>
+          <option>Morning</option>
+          <option>Evening</option>
+          <option>Night</option>
+        </select>
+      </label>
+      <button class="btn primary">Request Swap</button>
+    </form>
+  }
+
+  <div class="card">
+    <div class="card-title">Weekly Schedule</div>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Shift</th>
+          @if (isManager()) {
+            <th>Employee ID</th>
+          }
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let s of shifts()">
+          <td>{{ s.date }}</td>
+          <td>{{ s.time }}</td>
+          @if (isManager()) {
+            <td>{{ s.employeeId }}</td>
+          }
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+

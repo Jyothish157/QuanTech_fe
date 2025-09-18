@@ -1,0 +1,33 @@
+<div class="login-wrap">
+  <form class="card" (ngSubmit)="submit()">
+    <div style="display:flex;flex-direction:column;align-items:center;gap:1rem;margin-bottom:1rem;">
+      <img src="./file.jpg" alt="logo"
+        style="width: 80px;height: 80px;border-radius:50%;background:linear-gradient(135deg,#c471f5,#fa71cd);box-shadow:0 2px 12px rgba(0,0,0,0.15);">
+      <h2>Welcome Back!</h2>
+    </div>
+    <label>
+      Username or Email
+      <input [(ngModel)]="form.username" name="username" required placeholder="Username or Email" />
+    </label>
+    <label>
+      Password
+      <div style="position:relative;display:flex;align-items:center;">
+        <input [type]="showPassword ? 'text' : 'password'" [(ngModel)]="form.password" name="password" required
+          placeholder="Password" style="width:100%;padding-right:40px;" />
+        <button type="button" (click)="togglePassword()"
+          style="position:absolute;right:8px;background:none;border:none;cursor:pointer;padding:0;">
+          <span [innerHTML]="showPassword ? eyeOpenIcon : eyeClosedIcon"></span>
+        </button>
+      </div>
+    </label>
+    <label>
+      Role
+      <select [(ngModel)]="form.role" name="role" required style="color:#111;background:rgba(255,255,255,0.85);">
+        <option value="employee" style="color:#111;">Employee</option>
+        <option value="manager" style="color:#111;">Manager</option>
+      </select>
+    </label>
+    <button class="btn primary">LOGIN</button>
+    <div class="error" *ngIf="error">{{ error }}</div>
+  </form>
+</div>

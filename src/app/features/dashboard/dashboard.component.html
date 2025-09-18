@@ -1,0 +1,59 @@
+<section class="page" >
+  <header class="header">
+    <div class="overview-text">
+      <h1>Dashboard Overview</h1>
+      <p class="muted">Welcome back! Here's what's happening today.</p>
+    </div>
+  </header>
+
+  <div class="kpis">
+    <a class="kpi" routerLink="/attendance">
+      <div class="icon blue">⌚</div>
+      <div class="meta">
+        <div class="title">Today's Attendance</div>
+        <div class="desc">142 of 160 employees</div>
+      </div>
+      <div class="value">89%</div>
+    </a>
+
+    <a class="kpi" routerLink="/leave-requests">
+      <div class="icon violet">📅</div>
+      <div class="meta">
+        <div class="title">Pending Leave Requests</div>
+        <div class="desc">3 urgent approvals</div>
+      </div>
+      <div class="value">12</div>
+    </a>
+
+    <a class="kpi" routerLink="/shifts">
+      <div class="icon green">👥</div>
+      <div class="meta">
+        <div class="title">Shift Coverage</div>
+        <div class="desc">2 open shifts</div>
+      </div>
+      <div class="value">96%</div>
+    </a>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <div class="card-title">Recent Activity</div>
+      <ul class="list">
+        <li>Mike Johnson submitted a leave request</li>
+        <li>Shift swap approved for Sarah Wilson</li>
+        <li>Attendance synced at 7:00 PM</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Quick Actions</div>
+      <div class="quick">
+        <a routerLink="/attendance" class="qa">Clock In</a>
+        <a routerLink="/leave-requests" class="qa">New Leave</a>
+        <a routerLink="/reports" class="qa">View Reports</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+

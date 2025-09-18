@@ -1,0 +1,28 @@
+<section class="page">
+  <h2>Employee Attendance</h2>
+
+  <form class="form" (ngSubmit)="add()">
+    <label>Employee ID<input [(ngModel)]="form.id" name="id" required /></label>
+    <label>Name<input [(ngModel)]="form.name" name="name" required /></label>
+    <label>Department<input [(ngModel)]="form.department" name="department" placeholder="General" /></label>
+    <button class="btn primary">Add Employee</button>
+  </form>
+
+  <div class="card">
+    <div class="card-title">Search</div>
+    <input class="search" [(ngModel)]="term" placeholder="Search by id, name, department" />
+  </div>
+
+  <table class="table">
+    <thead><tr><th>ID</th><th>Name</th><th>Department</th></tr></thead>
+    <tbody>
+      <tr *ngFor="let e of employees">
+        <td>{{ e.id }}</td>
+        <td>{{ e.name }}</td>
+        <td>{{ e.department }}</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+

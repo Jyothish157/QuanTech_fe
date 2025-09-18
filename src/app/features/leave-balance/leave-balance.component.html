@@ -1,0 +1,16 @@
+<section class="page">
+  <h2>Leave Balance</h2>
+  <div class="cards">
+    <div class="card" *ngFor="let b of balances()">
+      <div class="header">
+        <div class="dot"></div>
+        <div class="label">{{ b.type }}</div>
+      </div>
+      <div class="value">{{ b.balanceDays }}</div>
+      <div class="sub">days left</div>
+      <div class="bar"><span [style.width.%]="(b.balanceDays/20) * 100"></span></div>
+    </div>
+  </div>
+</section>
+
+
