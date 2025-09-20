@@ -1,7 +1,11 @@
 <div class="app-shell" *ngIf="isAuthenticated(); else loginOnly">
   <div class="body">
     <button class="toggle-sidebar" [class.open]="isSidebarOpen" (click)="toggleSidebar()">
-      {{ isSidebarOpen ? '←' : '→' }}
+      <div class="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
     </button>
     <aside class="sidebar" [class.open]="isSidebarOpen">
       <div class="brand">ELAMS</div>
