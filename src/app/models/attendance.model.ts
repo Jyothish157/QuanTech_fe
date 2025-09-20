@@ -1,8 +1,8 @@
-export interface AttendanceRecord {
-  date: string;
-  in: string;
-  out?: string;
-  total?: string;
+export interface Attendance {
+  EmployeeID: string;
+  ClockInTime: string;
+  ClockOutTime?: string;
+  WorkHours?: number;
 }
 
 

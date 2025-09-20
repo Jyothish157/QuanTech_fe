@@ -16,12 +16,17 @@ export class EmployeeAttendanceComponent {
   term = '';
 
   get employees(){
-    return this.term ? this.employeesSrv.search(this.term) : this.employeesSrv.employees();
+    return this.term ? this.employeesSrv.search(this.term) : this.employeesSrv.getEmployees();
   }
 
   add(){
     if(!this.form.id || !this.form.name) return;
-    this.employeesSrv.addEmployee({ id: this.form.id, name: this.form.name, department: this.form.department || 'General' });
+    this.employeesSrv.addEmployee({ 
+      EmployeeID: this.form.id, 
+      Name: this.form.name, 
+      Department: this.form.department || 'General',
+      Role: 'Employee'
+    });
     this.form = { id: '', name: '', department: '' };
   }
 }

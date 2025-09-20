@@ -1,15 +1,32 @@
 <section class="page">
   <h2>Leave Balance</h2>
+  
+  <div class="employee-info" *ngIf="currentEmployee">
+    <p><strong>Employee:</strong> {{ currentEmployee.Name }} ({{ currentEmployee.EmployeeID }})</p>
+    <p><strong>Total Leave Balance:</strong> {{ getTotalBalance() }} days</p>
+  </div>
+
   <div class="cards">
-    <div class="card" *ngFor="let b of balances()">
+    <div class="card" *ngFor="let b of balances">
       <div class="header">
         <div class="dot"></div>
-        <div class="label">{{ b.type }}</div>
+        <div class="label">{{ b.LeaveType }}</div>
       </div>
-      <div class="value">{{ b.balanceDays }}</div>
+      <div class="value">{{ b.BalanceDays }}</div>
       <div class="sub">days left</div>
-      <div class="bar"><span [style.width.%]="(b.balanceDays/20) * 100"></span></div>
+      <div class="bar">
+        <span [style.width.%]="(b.BalanceDays / getMaxBalance()) * 100"></span>
+      </div>
     </div>
+  </div>
+
+  <div class="info-card">
+    <h3>Leave Balance Information</h3>
+    <ul>
+      <li>Leave balances are automatically updated when requests are approved</li>
+      <li>You cannot request more leave than your available balance</li>
+      <li>Balances reset annually according to company policy</li>
+    </ul>
   </div>
 </section>
 

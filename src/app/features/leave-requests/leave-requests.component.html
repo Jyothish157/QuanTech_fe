@@ -1,41 +1,99 @@
 <section class="page">
   <h2>Leave Management</h2>
+  
+  <div class="message" *ngIf="message" [class.success]="message.includes('successfully')" [class.error]="message.includes('Insufficient')">
+    {{ message }}
+  </div>
+
   <form class="form" (ngSubmit)="submit()">
+    <h3>Submit New Leave Request</h3>
     <label>
-      Type
+      Leave Type
       <select [(ngModel)]="form.type" name="type" required>
-        <option *ngFor="let t of types" [value]="t">{{t}}</option>
+        <option *ngFor="let t of types" [value]="t">{{ t }}</option>
       </select>
     </label>
     <label>
-      From
+      Start Date
       <input type="date" [(ngModel)]="form.from" name="from" required />
     </label>
     <label>
-      To
+      End Date
       <input type="date" [(ngModel)]="form.to" name="to" required />
     </label>
     <label>
-      Reason
-      <input type="text" [(ngModel)]="form.reason" name="reason" placeholder="Optional" />
+      Reason (Optional)
+      <input type="text" [(ngModel)]="form.reason" name="reason" placeholder="Enter reason for leave" />
     </label>
-    <button class="btn primary">New Leave Request</button>
+    <button class="btn primary" type="submit">Submit Leave Request</button>
   </form>
-  <div class="card">
-    <div class="card-title">Leave Requests History</div>
-    <table class="table">
-      <thead><tr><th>Type</th><th>Start Date</th><th>End Date</th><th>Days</th><th>Status</th><th>Reason</th></tr></thead>
-      <tbody>
-        <tr *ngFor="let r of requests">
-          <td>{{ r.type }}</td>
-          <td>{{ r.from }}</td>
-          <td>{{ r.to }}</td>
-          <td>{{ calcDays(r.from,r.to) }}</td>
-          <td><span class="badge" [class.approved]="r.status==='Approved'" [class.pending]="r.status==='Pending'" [class.rejected]="r.status==='Rejected'">{{ r.status }}</span></td>
-          <td>{{ r.reason || '-' }}</td>
-        </tr>
-      </tbody>
-    </table>
+
+  <div class="grid">
+    <div class="card">
+      <div class="card-title">My Leave Requests</div>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Leave ID</th>
+            <th>Type</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Days</th>
+            <th>Status</th>
+            <th>Reason</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let r of myRequests">
+            <td>{{ r.LeaveID }}</td>
+            <td>{{ r.LeaveType }}</td>
+            <td>{{ r.StartDate }}</td>
+            <td>{{ r.EndDate }}</td>
+            <td>{{ calcDays(r.StartDate, r.EndDate) }}</td>
+            <td>
+              <span class="badge" 
+                    [class.approved]="r.Status==='Approved'" 
+                    [class.pending]="r.Status==='Pending'" 
+                    [class.rejected]="r.Status==='Rejected'">
+                {{ r.Status }}
+              </span>
+            </td>
+            <td>{{ r.Reason || '-' }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card" *ngIf="isManager">
+      <div class="card-title">Pending Requests (Manager View)</div>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Employee</th>
+            <th>Type</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Days</th>
+            <th>Reason</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let r of pendingRequests">
+            <td>{{ getEmployeeName(r.EmployeeID) }}</td>
+            <td>{{ r.LeaveType }}</td>
+            <td>{{ r.StartDate }}</td>
+            <td>{{ r.EndDate }}</td>
+            <td>{{ calcDays(r.StartDate, r.EndDate) }}</td>
+            <td>{{ r.Reason || '-' }}</td>
+            <td>
+              <button class="btn small success" (click)="approveRequest(r.LeaveID)">Approve</button>
+              <button class="btn small danger" (click)="rejectRequest(r.LeaveID)">Reject</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </section>
 

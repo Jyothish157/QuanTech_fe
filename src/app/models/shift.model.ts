@@ -1,16 +1,20 @@
-export interface ShiftItem {
-  shiftId: string;
-  employeeId: string;
-  date: string;
-  time: 'Morning' | 'Evening' | 'Night';
+export interface Shift {
+  ShiftID: string;
+  EmployeeID: string;
+  Date: string;
+  ShiftType: 'Morning' | 'Evening' | 'Night';
+  StartTime: string;
+  EndTime: string;
 }
 
 export interface ShiftSwapRequest {
-  date: string;
-  from: 'Morning' | 'Evening' | 'Night';
-  to: 'Morning' | 'Evening' | 'Night';
-  employeeId: string;
-  status: 'Pending' | 'Approved' | 'Rejected';
+  SwapID: string;
+  EmployeeID: string;
+  Date: string;
+  FromShift: 'Morning' | 'Evening' | 'Night';
+  ToShift: 'Morning' | 'Evening' | 'Night';
+  Status: 'Pending' | 'Approved' | 'Rejected';
+  RequestedBy: string;
 }
 
 

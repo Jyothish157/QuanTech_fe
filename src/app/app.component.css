@@ -2,8 +2,8 @@
     display: flex;
     flex-direction: column;
     min-height: 100dvh;
-    background: #F5F3FF;
-    color: #2D1B69;
+    background: linear-gradient(135deg, #290E3F 0%, #A71C63 50%, #692994 100%);
+    color: #FFFFFF;
 }
 
 .body {
@@ -13,8 +13,8 @@
 
 .sidebar {
     width: 260px;
-    background: linear-gradient(180deg, #2D1B69 0%, #3D2A7D 100%);
-    color: #F1EDFF;
+    background: linear-gradient(180deg, #290E3F 0%, #A71C63 100%);
+    color: #FFFFFF;
     display: flex;
     flex-direction: column;
     padding: 1rem 0;
@@ -25,7 +25,8 @@
     transform: translateX(-260px);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     z-index: 1000;
-    box-shadow: 4px 0 15px rgba(45, 27, 105, 0.2);
+    box-shadow: 4px 0 15px rgba(41, 14, 63, 0.3);
+    backdrop-filter: blur(10px);
 }
 
 .sidebar.open {
@@ -37,7 +38,7 @@
     left: 0;
     top: 1.5rem;
     z-index: 1001;
-    background: #7A5AF8;
+    background: linear-gradient(135deg, #A71C63, #692994);
     border: none;
     width: 36px;
     height: 36px;
@@ -47,11 +48,11 @@
     display: grid;
     place-items: center;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 2px 2px 10px rgba(45, 27, 105, 0.15);
+    box-shadow: 2px 2px 10px rgba(41, 14, 63, 0.3);
 }
 
 .toggle-sidebar:hover {
-    background: #5C3AFF;
+    background: linear-gradient(135deg, #EC4B94, #A71C63);
     width: 40px;
 }
 
@@ -102,17 +103,17 @@
 }
 
 .sidebar a:hover {
-    background: rgba(122, 90, 248, 0.15);
+    background: rgba(236, 75, 148, 0.2);
     color: #fff;
 }
 
 .sidebar a.active {
-    background: linear-gradient(45deg, #5C3AFF, #8C6EFF);
+    background: linear-gradient(45deg, #EC4B94, #A71C63);
     color: #fff;
 }
 
 .sidebar a.active:hover {
-    background: linear-gradient(45deg, #5C3AFF, #7A5AF8);
+    background: linear-gradient(45deg, #EC4B94, #692994);
 }
 
 .sidebar .logout {
@@ -120,7 +121,7 @@
     border: 0;
     border-radius: 8px;
     padding: 0.75rem 1rem;
-    background: #FF6B6B;
+    background: linear-gradient(135deg, #FF6B6B, #FF5252);
     color: #fff;
     cursor: pointer;
     display: flex;
@@ -128,11 +129,14 @@
     justify-content: center;
     gap: 0.5rem;
     font-weight: 600;
-    transition: background-color 0.2s ease;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
 }
 
 .sidebar .logout:hover {
-    background: #ff5252;
+    background: linear-gradient(135deg, #FF5252, #F44336);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
 }
 
 .content {

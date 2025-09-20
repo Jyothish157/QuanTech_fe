@@ -1,9 +1,9 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ShiftService } from '../../services/shift.service';
-import { AuthService } from '../../services/auth.service';
-import { ShiftItem } from '../../models/shift.model';
+import { EmployeeService } from '../../services/employee.service';
+import { Shift, ShiftSwapRequest } from '../../models/shift.model';
 
 @Component({
   selector: 'app-shifts',
@@ -13,53 +13,90 @@ import { ShiftItem } from '../../models/shift.model';
   styleUrls: ['./shifts.component.css']
 })
 export class ShiftsComponent {
-  private shift = inject(ShiftService);
-  private auth = inject(AuthService);
-
-  shifts = computed(() => {
-    const currentUser = this.auth.currentUser();
-    return currentUser ? this.shift.getEmployeeShifts(currentUser.id) : [];
-  });
-
-  swapRequests = this.shift.swapRequests;
-  isManager = computed(() => this.auth.currentUser()?.role === 'manager');
+  currentEmployee: any;
+  isManager = false;
+  message = '';
 
   swap = { date: '', from: 'Morning' as const, to: 'Evening' as const };
-  newShift: Omit<ShiftItem, 'shiftId'> = {
+  newShift = {
     employeeId: '',
     date: '',
-    time: 'Morning'
+    shiftType: 'Morning' as const
   };
 
-  requestSwap() {
-    const currentUser = this.auth.currentUser();
-    if (!currentUser) return;
-
-    this.shift.requestSwap(this.swap.date, this.swap.from, this.swap.to, currentUser.id);
-    alert('Swap request submitted for '+this.swap.date+': '+this.swap.from+' → '+this.swap.to);
-    this.swap = { date: '', from: 'Morning', to: 'Evening' };
+  constructor(
+    private shiftService: ShiftService,
+    private employeeService: EmployeeService
+  ) {
+    this.currentEmployee = this.employeeService.getCurrentUser();
+    this.isManager = this.currentEmployee?.Role === 'Manager';
   }
 
-  createShift() {
-    if (!this.isManager()) return;
+  get shifts(): Shift[] {
+    return this.currentEmployee ? 
+      this.shiftService.getEmployeeShifts(this.currentEmployee.EmployeeID) : [];
+  }
+
+  get allShifts(): Shift[] {
+    return this.shiftService.getShifts();
+  }
+
+  get swapRequests(): ShiftSwapRequest[] {
+    return this.shiftService.getSwapRequests();
+  }
+
+  get pendingSwapRequests(): ShiftSwapRequest[] {
+    return this.swapRequests.filter(r => r.Status === 'Pending');
+  }
+
+  requestSwap(): void {
+    if (!this.currentEmployee) return;
+
+    this.shiftService.requestShiftSwap(
+      this.currentEmployee.EmployeeID,
+      this.swap.date,
+      this.swap.from,
+      this.swap.to
+    );
+
+    this.message = `Swap request submitted for ${this.swap.date}: ${this.swap.from} → ${this.swap.to}`;
+    this.swap = { date: '', from: 'Morning', to: 'Evening' };
     
-    const shift = this.shift.createShift(this.newShift);
-    alert('New shift created');
+    setTimeout(() => this.message = '', 3000);
+  }
+
+  createShift(): void {
+    if (!this.isManager) return;
+    
+    this.shiftService.assignShift(
+      this.newShift.employeeId,
+      this.newShift.date,
+      this.newShift.shiftType
+    );
+
+    this.message = 'New shift created successfully!';
     this.newShift = {
       employeeId: '',
       date: '',
-      time: 'Morning'
+      shiftType: 'Morning'
     };
+    
+    setTimeout(() => this.message = '', 3000);
   }
 
-  approveSwap(employeeId: string, date: string) {
-    if (!this.isManager()) return;
-    this.shift.approveSwapRequest(employeeId, date);
+  approveSwap(swapId: string): void {
+    if (!this.isManager) return;
+    this.shiftService.approveSwapRequest(swapId);
   }
 
-  rejectSwap(employeeId: string, date: string) {
-    if (!this.isManager()) return;
-    this.shift.rejectSwapRequest(employeeId, date);
+  rejectSwap(swapId: string): void {
+    if (!this.isManager) return;
+    this.shiftService.rejectSwapRequest(swapId);
+  }
+
+  getEmployeeName(employeeId: string): string {
+    const employee = this.employeeService.getEmployee(employeeId);
+    return employee ? employee.Name : employeeId;
   }
 }
 

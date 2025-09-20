@@ -1,5 +1,10 @@
 <section class="page">
-  <h2 >Attendance Management</h2>
+  <h2>Employee Attendance</h2>
+  
+  <div class="employee-info" *ngIf="currentEmployee">
+    <p><strong>Employee:</strong> {{ currentEmployee.Name }} ({{ currentEmployee.EmployeeID }})</p>
+    <p><strong>Department:</strong> {{ currentEmployee.Department }}</p>
+  </div>
 
   <div class="grid">
     <div class="card clock">
@@ -14,19 +19,41 @@
         </div>
       </button>
       <div class="clock-status">Status: <strong>{{ isClockedIn() ? 'Clocked In' : 'Clocked Out' }}</strong></div>
+      
+      <div class="today-info" *ngIf="getTodayAttendance()">
+        <p><strong>Today's Clock In:</strong> {{ formatTime(getTodayAttendance()!.ClockInTime) }}</p>
+        <p *ngIf="getTodayAttendance()!.ClockOutTime">
+          <strong>Today's Clock Out:</strong> {{ formatTime(getTodayAttendance()!.ClockOutTime!) }}
+        </p>
+        <p *ngIf="getTodayAttendance()!.WorkHours">
+          <strong>Work Hours:</strong> {{ getTodayAttendance()!.WorkHours }} hours
+        </p>
+      </div>
     </div>
 
     <div class="card">
       <div class="card-title">Attendance History</div>
       <table class="table">
-        <thead><tr><th>Date</th><th>Clock In</th><th>Clock Out</th><th>Hours</th><th>Status</th></tr></thead>
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Clock In</th>
+            <th>Clock Out</th>
+            <th>Work Hours</th>
+            <th>Status</th>
+          </tr>
+        </thead>
         <tbody>
-          <tr *ngFor="let r of records()">
-            <td>{{ r.date }}</td>
-            <td>{{ r.in }}</td>
-            <td>{{ r.out || '--' }}</td>
-            <td>{{ r.total || '--' }}</td>
-            <td><span class="badge" [class.present]="!!r.in" [class.absent]="!r.in">{{ r.in ? 'Present' : 'Absent' }}</span></td>
+          <tr *ngFor="let record of getAttendanceRecords()">
+            <td>{{ formatDate(record.ClockInTime) }}</td>
+            <td>{{ formatTime(record.ClockInTime) }}</td>
+            <td>{{ record.ClockOutTime ? formatTime(record.ClockOutTime) : '--' }}</td>
+            <td>{{ record.WorkHours ? record.WorkHours + 'h' : '--' }}</td>
+            <td>
+              <span class="badge" [class.present]="!!record.ClockInTime" [class.absent]="!record.ClockInTime">
+                {{ record.ClockInTime ? 'Present' : 'Absent' }}
+              </span>
+            </td>
           </tr>
         </tbody>
       </table>

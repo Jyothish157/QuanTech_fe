@@ -1,26 +1,113 @@
 <section class="page">
   <h2>Reports & Analytics</h2>
+  
+  <div class="employee-info" *ngIf="currentEmployee">
+    <p><strong>Employee:</strong> {{ currentEmployee.Name }} ({{ currentEmployee.EmployeeID }})</p>
+    <p><strong>Role:</strong> {{ currentEmployee.Role }}</p>
+  </div>
+
   <div class="grid">
     <div class="card">
-      <div class="label">Attendance Trend</div>
+      <div class="card-title">Attendance Trend (Last 7 Days)</div>
       <div class="chart">
-        <div class="bar" style="height:60%"></div>
-        <div class="bar" style="height:80%"></div>
-        <div class="bar" style="height:40%"></div>
-        <div class="bar" style="height:70%"></div>
-        <div class="bar" style="height:50%"></div>
-      </div>
-    </div>
-    <div class="card">
-      <div class="label">Leave Usage by Type</div>
-      <div class="donut">
-        <div class="ring"></div>
-        <div class="legend">
-          <span class="dot v"></span> Vacation
-          <span class="dot s"></span> Sick
-          <span class="dot c"></span> Casual
+        <div class="bar" *ngFor="let percentage of attendanceTrend" 
+             [style.height.%]="percentage"
+             [title]="percentage + '% attendance'">
         </div>
       </div>
+      <div class="chart-labels">
+        <span>Mon</span>
+        <span>Tue</span>
+        <span>Wed</span>
+        <span>Thu</span>
+        <span>Fri</span>
+        <span>Sat</span>
+        <span>Sun</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Leave Usage by Type</div>
+      <div class="leave-stats">
+        <div class="stat-item" *ngFor="let item of leaveUsageByType">
+          <div class="stat-label">{{ item.type }}</div>
+          <div class="stat-value">{{ item.count }} requests</div>
+          <div class="stat-percentage">{{ item.percentage }}%</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Work Hours Summary</div>
+      <div class="hours-stats">
+        <div class="stat-item">
+          <div class="stat-label">Total Work Hours</div>
+          <div class="stat-value">{{ totalWorkHours }}h</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-label">Average per Day</div>
+          <div class="stat-value">{{ averageWorkHours }}h</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-label">Total Days Worked</div>
+          <div class="stat-value">{{ getTotalDaysWorked() }}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Leave Request Status</div>
+      <div class="leave-status">
+        <div class="status-item">
+          <div class="status-label">Pending</div>
+          <div class="status-value pending">{{ pendingLeaveRequests }}</div>
+        </div>
+        <div class="status-item">
+          <div class="status-label">Approved</div>
+          <div class="status-value approved">{{ approvedLeaveRequests }}</div>
+        </div>
+        <div class="status-item">
+          <div class="status-label">Total Requests</div>
+          <div class="status-value">{{ leaveData.length }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid" *ngIf="isManager">
+    <div class="card">
+      <div class="card-title">Shift Coverage Analysis</div>
+      <div class="shift-coverage">
+        <div class="coverage-item" *ngFor="let coverage of shiftCoverage">
+          <div class="coverage-label">{{ coverage.shift }} Shift</div>
+          <div class="coverage-bar">
+            <div class="coverage-fill" [style.width.%]="coverage.coverage"></div>
+          </div>
+          <div class="coverage-value">{{ coverage.coverage }}%</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Employee Attendance Summary</div>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Employee</th>
+            <th>Total Days</th>
+            <th>Total Hours</th>
+            <th>Avg Hours/Day</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let employee of getEmployees()">
+            <td>{{ employee.Name }}</td>
+            <td>{{ getEmployeeAttendanceDays(employee.EmployeeID) }}</td>
+            <td>{{ getEmployeeTotalHours(employee.EmployeeID) }}h</td>
+            <td>{{ getEmployeeAverageHours(employee.EmployeeID) }}h</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 </section>
