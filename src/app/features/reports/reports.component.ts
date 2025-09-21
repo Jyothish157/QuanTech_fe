@@ -4,6 +4,7 @@ import { AttendanceService } from '../../services/attendance.service';
 import { LeaveService } from '../../services/leave.service';
 import { ShiftService } from '../../services/shift.service';
 import { EmployeeService } from '../../services/employee.service';
+import { AuthService } from '../../services/auth.service';
 import { Attendance } from '../../models/attendance.model';
 import { LeaveRequest } from '../../models/leave.model';
 import { Shift } from '../../models/shift.model';
@@ -23,10 +24,11 @@ export class ReportsComponent {
     private attendanceService: AttendanceService,
     private leaveService: LeaveService,
     private shiftService: ShiftService,
-    private employeeService: EmployeeService
+    private employeeService: EmployeeService,
+    private auth: AuthService
   ) {
     this.currentEmployee = this.employeeService.getCurrentUser();
-    this.isManager = this.currentEmployee?.Role === 'Manager';
+    this.isManager = this.auth.currentUser()?.role === 'manager';
   }
 
   get attendanceData(): Attendance[] {

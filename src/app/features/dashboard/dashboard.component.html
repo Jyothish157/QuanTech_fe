@@ -53,6 +53,10 @@
         <a routerLink="/leave-requests" class="qa">New Leave</a>
         <a routerLink="/reports" class="qa">View Reports</a>
         <a routerLink="/leave-balance" class="qa">Leave Balance</a>
+        <a routerLink="/shifts" class="qa">Shifts</a>
+        <!-- Manager only actions -->
+        <a routerLink="/employee-management" class="qa" *ngIf="isManager">Manage Employees</a>
+        <a routerLink="/employee-attendance" class="qa" *ngIf="isManager">Employee Attendance</a>
       </div>
     </div>
   </div>

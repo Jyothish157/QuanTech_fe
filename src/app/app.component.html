@@ -1,27 +1,8 @@
 <div class="app-shell" *ngIf="isAuthenticated(); else loginOnly">
-  <div class="body">
-    <button class="toggle-sidebar" [class.open]="isSidebarOpen" (click)="toggleSidebar()">
-      <div class="hamburger">
-        <span></span>
-        <span></span>
-        <span></span>
-      </div>
-    </button>
-    <aside class="sidebar" [class.open]="isSidebarOpen">
-      <div class="brand">ELAMS</div>
-      <a routerLink="/dashboard" routerLinkActive="active" (click)="closeOnMobile()">Dashboard</a>
-      <a routerLink="/attendance" routerLinkActive="active" (click)="closeOnMobile()">Attendance</a>
-      <a routerLink="/employee-attendance" routerLinkActive="active" (click)="closeOnMobile()">Employee Management</a>
-      <a routerLink="/leave-requests" routerLinkActive="active" (click)="closeOnMobile()">Leave Requests</a>
-      <a routerLink="/leave-balance" routerLinkActive="active" (click)="closeOnMobile()">Leave Balance</a>
-      <a routerLink="/shifts" routerLinkActive="active" (click)="closeOnMobile()">Shifts</a>
-      <a routerLink="/reports" routerLinkActive="active" (click)="closeOnMobile()">Reports</a>
-      <button class="logout" (click)="logout()">Logout</button>
-    </aside>
-    <main class="content">
-      <router-outlet />
-    </main>
-  </div>
+  <app-navigation></app-navigation>
+  <main class="content">
+    <router-outlet />
+  </main>
 </div>
 <ng-template #loginOnly>
   <router-outlet />

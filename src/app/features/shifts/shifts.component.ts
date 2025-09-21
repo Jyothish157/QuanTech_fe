@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ShiftService } from '../../services/shift.service';
 import { EmployeeService } from '../../services/employee.service';
+import { AuthService } from '../../services/auth.service';
 import { Shift, ShiftSwapRequest } from '../../models/shift.model';
 
 @Component({
@@ -26,10 +27,11 @@ export class ShiftsComponent {
 
   constructor(
     private shiftService: ShiftService,
-    private employeeService: EmployeeService
+    private employeeService: EmployeeService,
+    private auth: AuthService
   ) {
     this.currentEmployee = this.employeeService.getCurrentUser();
-    this.isManager = this.currentEmployee?.Role === 'Manager';
+    this.isManager = this.auth.currentUser()?.role === 'manager';
   }
 
   get shifts(): Shift[] {

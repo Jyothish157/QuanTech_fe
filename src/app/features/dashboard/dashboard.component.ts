@@ -27,7 +27,7 @@ export class DashboardComponent {
     private employeeService: EmployeeService
   ) {
     this.currentEmployee = this.employeeService.getCurrentUser();
-    this.isManager = this.currentEmployee?.Role === 'Manager';
+    this.isManager = this.auth.currentUser()?.role === 'manager';
   }
 
   logout(){

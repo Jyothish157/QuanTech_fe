@@ -1,62 +1,80 @@
 <section class="page">
-  <h2>Employee Attendance</h2>
+  <header class="header">
+    <div class="overview-text">
+      <h1>Employee Attendance</h1>
+      <p class="muted">Track your daily attendance and work hours.</p>
+    </div>
+  </header>
   
   <div class="employee-info" *ngIf="currentEmployee">
     <p><strong>Employee:</strong> {{ currentEmployee.Name }} ({{ currentEmployee.EmployeeID }})</p>
     <p><strong>Department:</strong> {{ currentEmployee.Department }}</p>
   </div>
 
-  <div class="grid">
-    <div class="card clock">
-      <div class="clock-time">{{ now() | date:'h:mm:ss a' }}</div>
-      <div class="clock-date">{{ now() | date:'fullDate' }}</div>
-      <button class="toggle" [class.on]="isClockedIn()" (click)="toggleClock()">
-        <div class="flexcol">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon" aria-hidden="true">
-            <path d="M5 5a2 2 0 0 1 3.008-1.728l11.997 6.998a2 2 0 0 1 .003 3.458l-12 7A2 2 0 0 1 5 19z"></path>
-          </svg>
-          <span class="label">{{ isClockedIn() ? 'Clock Out' : 'Clock In' }}</span>
+  <div class="attendance-layout">
+    <!-- Left Side - Clock In/Out -->
+    <div class="clock-section">
+      <div class="card clock">
+        <div class="clock-display">
+          <div class="clock-time">{{ now() | date:'h:mm:ss a' }}</div>
+          <div class="clock-date">{{ now() | date:'fullDate' }}</div>
         </div>
-      </button>
-      <div class="clock-status">Status: <strong>{{ isClockedIn() ? 'Clocked In' : 'Clocked Out' }}</strong></div>
-      
-      <div class="today-info" *ngIf="getTodayAttendance()">
-        <p><strong>Today's Clock In:</strong> {{ formatTime(getTodayAttendance()!.ClockInTime) }}</p>
-        <p *ngIf="getTodayAttendance()!.ClockOutTime">
-          <strong>Today's Clock Out:</strong> {{ formatTime(getTodayAttendance()!.ClockOutTime!) }}
-        </p>
-        <p *ngIf="getTodayAttendance()!.WorkHours">
-          <strong>Work Hours:</strong> {{ getTodayAttendance()!.WorkHours }} hours
-        </p>
+        
+        <button class="toggle" [class.on]="isClockedIn()" (click)="toggleClock()">
+          <div class="flexcol">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon" aria-hidden="true">
+              <path d="M5 5a2 2 0 0 1 3.008-1.728l11.997 6.998a2 2 0 0 1 .003 3.458l-12 7A2 2 0 0 1 5 19z"></path>
+            </svg>
+            <span class="label">{{ isClockedIn() ? 'Clock Out' : 'Clock In' }}</span>
+          </div>
+        </button>
+        
+        <div class="clock-status">Status: <strong>{{ isClockedIn() ? 'Clocked In' : 'Clocked Out' }}</strong></div>
+        
+        <div class="today-info" *ngIf="getTodayAttendance()">
+          <h4>Today's Summary</h4>
+          <p><strong>Clock In:</strong> {{ formatTime(getTodayAttendance()!.ClockInTime) }}</p>
+          <p *ngIf="getTodayAttendance()!.ClockOutTime">
+            <strong>Clock Out:</strong> {{ formatTime(getTodayAttendance()!.ClockOutTime!) }}
+          </p>
+          <p *ngIf="getTodayAttendance()!.WorkHours">
+            <strong>Work Hours:</strong> {{ getTodayAttendance()!.WorkHours }} hours
+          </p>
+        </div>
       </div>
     </div>
 
-    <div class="card">
-      <div class="card-title">Attendance History</div>
-      <table class="table">
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Clock In</th>
-            <th>Clock Out</th>
-            <th>Work Hours</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let record of getAttendanceRecords()">
-            <td>{{ formatDate(record.ClockInTime) }}</td>
-            <td>{{ formatTime(record.ClockInTime) }}</td>
-            <td>{{ record.ClockOutTime ? formatTime(record.ClockOutTime) : '--' }}</td>
-            <td>{{ record.WorkHours ? record.WorkHours + 'h' : '--' }}</td>
-            <td>
-              <span class="badge" [class.present]="!!record.ClockInTime" [class.absent]="!record.ClockInTime">
-                {{ record.ClockInTime ? 'Present' : 'Absent' }}
-              </span>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+    <!-- Right Side - Attendance Log -->
+    <div class="log-section">
+      <div class="card">
+        <div class="card-title">Attendance History</div>
+        <div class="table-container">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Clock In</th>
+                <th>Clock Out</th>
+                <th>Work Hours</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let record of getAttendanceRecords()">
+                <td>{{ formatDate(record.ClockInTime) }}</td>
+                <td>{{ formatTime(record.ClockInTime) }}</td>
+                <td>{{ record.ClockOutTime ? formatTime(record.ClockOutTime) : '--' }}</td>
+                <td>{{ record.WorkHours ? record.WorkHours + 'h' : '--' }}</td>
+                <td>
+                  <span class="badge" [class.present]="!!record.ClockInTime" [class.absent]="!record.ClockInTime">
+                    {{ record.ClockInTime ? 'Present' : 'Absent' }}
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   </div>
 </section>

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { LeaveService } from '../../services/leave.service';
 import { EmployeeService } from '../../services/employee.service';
+import { AuthService } from '../../services/auth.service';
 import { LeaveType, LeaveRequest } from '../../models/leave.model';
 
 @Component({
@@ -21,10 +22,11 @@ export class LeaveRequestsComponent {
 
   constructor(
     private leaveService: LeaveService,
-    private employeeService: EmployeeService
+    private employeeService: EmployeeService,
+    private auth: AuthService
   ) {
     this.currentEmployee = this.employeeService.getCurrentUser();
-    this.isManager = this.currentEmployee?.Role === 'Manager';
+    this.isManager = this.auth.currentUser()?.role === 'manager';
   }
 
   get requests(): LeaveRequest[] {

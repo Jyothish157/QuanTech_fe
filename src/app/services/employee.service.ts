@@ -61,6 +61,20 @@ export class EmployeeService {
     this.saveToStorage();
   }
 
+  updateEmployee(employeeId: string, updatedEmployee: Employee): void {
+    this.employeesSignal.update(list => 
+      list.map(emp => emp.EmployeeID === employeeId ? updatedEmployee : emp)
+    );
+    this.saveToStorage();
+  }
+
+  deleteEmployee(employeeId: string): void {
+    this.employeesSignal.update(list => 
+      list.filter(emp => emp.EmployeeID !== employeeId)
+    );
+    this.saveToStorage();
+  }
+
   search(term: string): Employee[] {
     const t = term.toLowerCase();
     return this.employeesSignal().filter(e =>

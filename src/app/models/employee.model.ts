@@ -4,6 +4,8 @@ export interface Employee {
   Department: string;
   Email?: string;
   Role: 'Employee' | 'Manager';
+  Username?: string;
+  Password?: string;
 }
 
 

@@ -1,5 +1,7 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './guards/auth.guard';
+import { managerGuard } from './guards/manager.guard';
+import { employeeGuard } from './guards/employee.guard';
 
 export const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
@@ -37,7 +39,12 @@ export const routes: Routes = [
   {
     path: 'employee-attendance',
     loadComponent: () => import('./features/employee-attendance/employee-attendance.component').then(m => m.EmployeeAttendanceComponent),
-    canActivate: [authGuard]
+    canActivate: [authGuard, managerGuard]
+  },
+  {
+    path: 'employee-management',
+    loadComponent: () => import('./features/employee-management/employee-management.component').then(m => m.EmployeeManagementComponent),
+    canActivate: [authGuard, managerGuard]
   },
   {
     path: '**',
