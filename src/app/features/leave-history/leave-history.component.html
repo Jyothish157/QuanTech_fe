@@ -1,0 +1,33 @@
+<section class="wrapper">
+  <header class="topbar">
+    <h2>Leave History</h2>
+    <button class="icon-btn" (click)="downloadCsv()" title="Download CSV" aria-label="Download CSV">
+      ⬇️
+    </button>
+  </header>
+
+  <div class="table-card">
+    <table>
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Type</th>
+          <th>Days</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let r of rows">
+          <td>{{ r.date }}</td>
+          <td>{{ r.type }}</td>
+          <td>{{ r.days }}</td>
+          <td>
+            <span class="badge" [class.ok]="r.status==='Approved'" [class.warn]="r.status==='Pending'" [class.err]="r.status==='Rejected'">{{ r.status }}</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+

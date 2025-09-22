@@ -27,6 +27,16 @@ export const routes: Routes = [
     canActivate: [authGuard]
   },
   {
+    path: 'leave-history',
+    loadComponent: () => import('./features/leave-history/leave-history.component').then(m => m.LeaveHistoryComponent),
+    canActivate: [authGuard]
+  },
+  {
+    path: 'company-policy',
+    loadComponent: () => import('./features/company-policy/company-policy.component').then(m => m.CompanyPolicyComponent),
+    canActivate: [authGuard]
+  },
+  {
     path: 'shifts',
     loadComponent: () => import('./features/shifts/shifts.component').then(m => m.ShiftsComponent),
     canActivate: [authGuard]
@@ -45,6 +55,14 @@ export const routes: Routes = [
     path: 'employee-management',
     loadComponent: () => import('./features/employee-management/employee-management.component').then(m => m.EmployeeManagementComponent),
     canActivate: [authGuard, managerGuard]
+  },
+  {
+    path: 'employee-profile',
+    children: [
+      { path: '', pathMatch: 'full', loadComponent: () => import('./features/employee-profile/home.component').then(m => m.EmployeeHomeComponent), canActivate: [authGuard] },
+      { path: 'profile/:id', loadComponent: () => import('./features/employee-profile/profile.component').then(m => m.EmployeeProfileComponent), canActivate: [authGuard] },
+      { path: 'edit/:id', loadComponent: () => import('./features/employee-profile/edit-profile.component').then(m => m.EditEmployeeProfileComponent), canActivate: [authGuard] }
+    ]
   },
   {
     path: '**',

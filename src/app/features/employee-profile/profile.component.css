@@ -1,0 +1,10 @@
+.profile { max-width: 800px; margin: 0 auto; padding: 1rem; }
+.header { display:flex; align-items:center; justify-content: space-between; margin-bottom: 1rem; }
+h2 { color:#2D1B69; margin:0; }
+.btn.primary { background: linear-gradient(135deg, #5C3AFF, #8C6EFF); color:#fff; border:0; padding:.55rem .85rem; border-radius:10px; }
+.grid { display:grid; grid-template-columns: repeat(2, 1fr); gap: .75rem 1rem; background:#fff; border:1px solid #F1EDFF; border-radius:14px; padding:1rem; box-shadow:0 4px 15px rgba(45,27,105,.05); }
+.row { display:flex; align-items:center; justify-content: space-between; padding:.35rem 0; }
+.row span { color:#8A88A8; }
+.row.full { grid-column: 1/-1; }
+
+

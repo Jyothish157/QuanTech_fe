@@ -5,14 +5,16 @@ import { LeaveService } from '../../services/leave.service';
 import { ShiftService } from '../../services/shift.service';
 import { EmployeeService } from '../../services/employee.service';
 import { AuthService } from '../../services/auth.service';
+import { DownloadService } from '../../services/download.service';
 import { Attendance } from '../../models/attendance.model';
 import { LeaveRequest } from '../../models/leave.model';
 import { Shift } from '../../models/shift.model';
+import { NgApexchartsModule } from 'ng-apexcharts';
 
 @Component({
   selector: 'app-reports',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, NgApexchartsModule],
   templateUrl: './reports.component.html',
   styleUrls: ['./reports.component.css']
 })
@@ -20,15 +22,142 @@ export class ReportsComponent {
   currentEmployee: any;
   isManager = false;
 
+  // Chart configurations
+  public pieChartOptions: Partial<any>;
+  public leaveChartOptions: Partial<any>;
+
   constructor(
     private attendanceService: AttendanceService,
     private leaveService: LeaveService,
     private shiftService: ShiftService,
     private employeeService: EmployeeService,
-    private auth: AuthService
+    private auth: AuthService,
+    private downloadService: DownloadService
   ) {
     this.currentEmployee = this.employeeService.getCurrentUser();
     this.isManager = this.auth.currentUser()?.role === 'manager';
+
+    // Initialize Line Chart Options for Month-wise Leave
+    this.leaveChartOptions = {
+      series: [{
+        name: 'Leave Count',
+        data: this.generateMonthWiseLeaveData()
+      }],
+      chart: {
+        type: 'line',
+        height: 320,
+        width: '100%',
+        zoom: {
+          enabled: true
+        },
+        toolbar: {
+          show: false
+        },
+        animations: {
+          enabled: true,
+          easing: 'smooth',
+          speed: 800
+        }
+      },
+      stroke: {
+        curve: 'smooth',
+        width: 2.5,
+        colors: ['#3B82F6']
+      },
+      markers: {
+        size: 4,
+        strokeWidth: 0,
+        hover: {
+          size: 6
+        }
+      },
+      xaxis: {
+        categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+        labels: {
+          style: {
+            colors: '#64748b',
+            fontSize: '11px'
+          },
+          rotateAlways: false,
+          hideOverlappingLabels: true
+        },
+        tickAmount: 12
+      },
+      yaxis: {
+        title: {
+          text: 'Number of Leaves',
+          style: {
+            fontSize: '12px',
+            fontWeight: 500
+          }
+        },
+        min: 0,
+        tickAmount: 5,
+        labels: {
+          style: {
+            colors: '#64748b',
+            fontSize: '11px'
+          },
+          formatter: (value: number) => Math.round(value)
+        }
+      },
+      tooltip: {
+        theme: 'dark',
+        y: {
+          title: {
+            formatter: () => 'Leaves'
+          }
+        }
+      },
+      grid: {
+        borderColor: '#f1f1f1',
+        strokeDashArray: 5,
+        xaxis: {
+          lines: {
+            show: true
+          }
+        },
+        yaxis: {
+          lines: {
+            show: true
+          }
+        },
+        padding: {
+          top: 0,
+          right: 20,
+          bottom: 0,
+          left: 20
+        }
+      }
+    };
+
+    // Initialize Pie Chart Options for Leave Distribution
+    this.pieChartOptions = {
+      series: this.generateLeaveData().percentages,
+      chart: {
+        type: 'pie',
+        height: 380
+      },
+      labels: this.generateLeaveData().labels,
+      colors: ['#F87171', '#60A5FA', '#C084FC'],
+      responsive: [{
+        breakpoint: 480,
+        options: {
+          chart: {
+            width: 320
+          },
+          legend: {
+            position: 'bottom'
+          }
+        }
+      }],
+      dataLabels: {
+        enabled: true,
+        formatter: function(val: number) {
+          return val.toFixed(1) + '%';
+        }
+      }
+    };
   }
 
   get attendanceData(): Attendance[] {
@@ -43,37 +172,50 @@ export class ReportsComponent {
     return this.shiftService.getShifts();
   }
 
-  get attendanceTrend(): number[] {
-    // Generate attendance trend for last 7 days
-    const trend = [];
-    for (let i = 6; i >= 0; i--) {
-      const date = new Date();
-      date.setDate(date.getDate() - i);
-      const dateStr = date.toISOString().split('T')[0];
-      
-      const dayAttendance = this.attendanceData.filter(a => 
-        a.ClockInTime.startsWith(dateStr)
-      );
-      
-      const totalEmployees = this.employeeService.getEmployees().length;
-      const presentEmployees = dayAttendance.length;
-      const percentage = totalEmployees > 0 ? (presentEmployees / totalEmployees) * 100 : 0;
-      trend.push(Math.round(percentage));
-    }
-    return trend;
+  private generateMonthWiseLeaveData(): number[] {
+    const year = 2025; // Current year
+    const months = Array.from({ length: 12 }, (_, i) => {
+      return new Date(year, i, 1);
+    });
+
+    return months.map(date => {
+      const startDate = new Date(date.getFullYear(), date.getMonth(), 1);
+      const endDate = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+
+      return this.leaveData.filter(leave => {
+        const leaveDate = new Date(leave.StartDate);
+        return leaveDate >= startDate && leaveDate <= endDate && leave.Status === 'Approved';
+      }).length;
+    });
   }
 
-  get leaveUsageByType(): { type: string; count: number; percentage: number }[] {
+  private generateLeaveData() {
     const leaveTypes = ['Sick', 'Vacation', 'Casual'];
-    const totalLeaves = this.leaveData.filter(l => l.Status === 'Approved').length;
+    const leaves = this.leaveData.filter(l => l.Status === 'Approved');
+    const totalLeaves = leaves.length;
     
-    return leaveTypes.map(type => {
-      const count = this.leaveData.filter(l => 
-        l.LeaveType === type && l.Status === 'Approved'
-      ).length;
+    const data = leaveTypes.map(type => {
+      const count = leaves.filter(l => l.LeaveType === type).length;
       const percentage = totalLeaves > 0 ? (count / totalLeaves) * 100 : 0;
       return { type, count, percentage: Math.round(percentage) };
     });
+
+    return {
+      percentages: data.map(item => item.percentage),
+      labels: data.map(item => item.type)
+    };
+  }
+
+  downloadAttendanceReport() {
+    const data = this.getEmployees().map(employee => ({
+      EmployeeID: employee.EmployeeID,
+      Name: this.getEmployeeName(employee.EmployeeID),
+      DaysWorked: this.getEmployeeAttendanceDays(employee.EmployeeID),
+      TotalHours: this.getEmployeeTotalHours(employee.EmployeeID),
+      AverageHours: this.getEmployeeAverageHours(employee.EmployeeID)
+    }));
+
+    this.downloadService.downloadAsPDF('attendance_report', data);
   }
 
   get totalWorkHours(): number {

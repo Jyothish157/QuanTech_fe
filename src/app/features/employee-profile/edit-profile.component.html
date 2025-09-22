@@ -1,0 +1,45 @@
+<section class="wrapper" [formGroup]="form">
+  <h2>Edit Profile</h2>
+
+  <div class="grid">
+    <label>
+      <span>Name</span>
+      <input formControlName="Name" />
+    </label>
+    <label>
+      <span>Employee ID</span>
+      <input formControlName="EmployeeID" />
+    </label>
+    <label>
+      <span>Email</span>
+      <input formControlName="Email" type="email" />
+    </label>
+    <label>
+      <span>Phone</span>
+      <input formControlName="Phone" />
+    </label>
+    <label>
+      <span>Department</span>
+      <input formControlName="Department" />
+    </label>
+    <label>
+      <span>Designation</span>
+      <input formControlName="Designation" />
+    </label>
+    <label>
+      <span>Date of Birth</span>
+      <input formControlName="DOB" type="date" />
+    </label>
+    <label class="full">
+      <span>Address</span>
+      <textarea formControlName="Address" rows="3"></textarea>
+    </label>
+  </div>
+
+  <div class="actions">
+    <button class="btn primary" (click)="save()">Save</button>
+    <a class="btn" [routerLink]="['/employee-profile/profile', emp?.EmployeeID]">Cancel</a>
+  </div>
+</section>
+
+

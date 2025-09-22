@@ -1,0 +1,296 @@
+<div class="profile-container">
+  <div class="header">
+    <h1>My Profile</h1>
+  </div>
+
+  <!-- Profile Header -->
+  <mat-card class="profile-header" *ngIf="employee">
+    <mat-card-content>
+      <div class="profile-info">
+        <div class="avatar">
+          <div class="avatar-circle">
+            {{ getInitials() }}
+          </div>
+        </div>
+        <div class="profile-details">
+          <h2>{{ getEmployeeName() }}</h2>
+          <p class="position">{{ employee.position }}</p>
+          <p class="department">{{ employee.department }}</p>
+          <div class="role-chip">
+            <mat-chip [color]="getRoleColor(employee.role)" selected>
+              <mat-icon matChipAvatar>{{ getRoleIcon(employee.role) }}</mat-icon>
+              {{ employee.role }}
+            </mat-chip>
+          </div>
+        </div>
+        <div class="profile-stats">
+          <div class="stat-item">
+            <div class="stat-value">{{ getAttendancePercentage() }}%</div>
+            <div class="stat-label">Attendance</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value">{{ getTotalLeaveBalance() }}</div>
+            <div class="stat-label">Leave Days</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value">{{ getAverageWorkHours() }}h</div>
+            <div class="stat-label">Avg Hours</div>
+          </div>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Profile Tabs -->
+  <mat-tab-group [(selectedIndex)]="selectedTabIndex" class="profile-tabs">
+    <!-- Personal Information Tab -->
+    <mat-tab label="Personal Information">
+      <div class="tab-content">
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title>Personal Information</mat-card-title>
+            <div class="card-actions">
+              <button mat-button (click)="editProfile()" *ngIf="!isEditing">
+                <mat-icon>edit</mat-icon>
+                Edit
+              </button>
+              <button mat-button (click)="cancelEdit()" *ngIf="isEditing">
+                <mat-icon>cancel</mat-icon>
+                Cancel
+              </button>
+              <button mat-raised-button color="primary" (click)="saveProfile()" *ngIf="isEditing">
+                <mat-icon>save</mat-icon>
+                Save
+              </button>
+            </div>
+          </mat-card-header>
+          <mat-card-content>
+            <form [formGroup]="profileForm" *ngIf="isEditing; else viewMode">
+              <div class="form-row">
+                <mat-form-field appearance="outline" class="form-field">
+                  <mat-label>First Name</mat-label>
+                  <input matInput formControlName="firstName" required>
+                  <mat-error *ngIf="profileForm.get('firstName')?.hasError('required')">
+                    First name is required
+                  </mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="form-field">
+                  <mat-label>Last Name</mat-label>
+                  <input matInput formControlName="lastName" required>
+                  <mat-error *ngIf="profileForm.get('lastName')?.hasError('required')">
+                    Last name is required
+                  </mat-error>
+                </mat-form-field>
+              </div>
+
+              <div class="form-row">
+                <mat-form-field appearance="outline" class="form-field">
+                  <mat-label>Email</mat-label>
+                  <input matInput type="email" formControlName="email" required>
+                  <mat-error *ngIf="profileForm.get('email')?.hasError('required')">
+                    Email is required
+                  </mat-error>
+                  <mat-error *ngIf="profileForm.get('email')?.hasError('email')">
+                    Please enter a valid email
+                  </mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="form-field">
+                  <mat-label>Phone</mat-label>
+                  <input matInput formControlName="phone" required>
+                  <mat-error *ngIf="profileForm.get('phone')?.hasError('required')">
+                    Phone is required
+                  </mat-error>
+                </mat-form-field>
+              </div>
+
+              <div class="form-row">
+                <mat-form-field appearance="outline" class="form-field">
+                  <mat-label>Department</mat-label>
+                  <input matInput formControlName="department" readonly>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="form-field">
+                  <mat-label>Position</mat-label>
+                  <input matInput formControlName="position" readonly>
+                </mat-form-field>
+              </div>
+
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Hire Date</mat-label>
+                <input matInput formControlName="hireDate" readonly>
+              </mat-form-field>
+            </form>
+
+            <ng-template #viewMode>
+              <div class="info-grid" *ngIf="employee">
+                <div class="info-item">
+                  <label>Employee ID</label>
+                  <span>{{ employee.employeeId }}</span>
+                </div>
+                <div class="info-item">
+                  <label>Full Name</label>
+                  <span>{{ getEmployeeName() }}</span>
+                </div>
+                <div class="info-item">
+                  <label>Email</label>
+                  <span>{{ employee.email }}</span>
+                </div>
+                <div class="info-item">
+                  <label>Phone</label>
+                  <span>{{ employee.phone }}</span>
+                </div>
+                <div class="info-item">
+                  <label>Department</label>
+                  <span>{{ employee.department }}</span>
+                </div>
+                <div class="info-item">
+                  <label>Position</label>
+                  <span>{{ employee.position }}</span>
+                </div>
+                <div class="info-item">
+                  <label>Hire Date</label>
+                  <span>{{ formatDate(employee.hireDate) }}</span>
+                </div>
+                <div class="info-item">
+                  <label>Status</label>
+                  <span [class]="employee.isActive ? 'status-active' : 'status-inactive'">
+                    {{ employee.isActive ? 'Active' : 'Inactive' }}
+                  </span>
+                </div>
+              </div>
+            </ng-template>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </mat-tab>
+
+    <!-- Change Password Tab -->
+    <mat-tab label="Change Password">
+      <div class="tab-content">
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title>Change Password</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <form [formGroup]="passwordForm" (ngSubmit)="changePassword()">
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Current Password</mat-label>
+                <input matInput type="password" formControlName="currentPassword" required>
+                <mat-error *ngIf="passwordForm.get('currentPassword')?.hasError('required')">
+                  Current password is required
+                </mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>New Password</mat-label>
+                <input matInput type="password" formControlName="newPassword" required>
+                <mat-error *ngIf="passwordForm.get('newPassword')?.hasError('required')">
+                  New password is required
+                </mat-error>
+                <mat-error *ngIf="passwordForm.get('newPassword')?.hasError('minlength')">
+                  Password must be at least 8 characters long
+                </mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Confirm New Password</mat-label>
+                <input matInput type="password" formControlName="confirmPassword" required>
+                <mat-error *ngIf="passwordForm.get('confirmPassword')?.hasError('required')">
+                  Please confirm your new password
+                </mat-error>
+                <mat-error *ngIf="passwordForm.get('confirmPassword')?.hasError('passwordMismatch')">
+                  Passwords do not match
+                </mat-error>
+              </mat-form-field>
+
+              <div class="form-actions">
+                <button mat-raised-button color="primary" type="submit" [disabled]="passwordForm.invalid">
+                  <mat-icon>lock</mat-icon>
+                  Change Password
+                </button>
+              </div>
+            </form>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </mat-tab>
+
+    <!-- Leave Balance Tab -->
+    <mat-tab label="Leave Balance">
+      <div class="tab-content">
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title>Leave Balance</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="leave-balances" *ngIf="leaveSummary">
+              <div class="balance-item" *ngFor="let balance of leaveSummary.leaveBalances">
+                <div class="balance-header">
+                  <h4>{{ balance.leaveType.name }}</h4>
+                  <span class="balance-badge">{{ balance.remainingDays }}/{{ balance.totalDays }}</span>
+                </div>
+                <div class="balance-details">
+                  <p>Used: {{ balance.usedDays }} days</p>
+                  <p>Remaining: {{ balance.remainingDays }} days</p>
+                </div>
+                <div class="balance-progress">
+                  <div class="progress-bar">
+                    <div class="progress-fill" [style.width.%]="(balance.usedDays / balance.totalDays) * 100"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </mat-tab>
+
+    <!-- Attendance Summary Tab -->
+    <mat-tab label="Attendance Summary">
+      <div class="tab-content">
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title>Attendance Summary (Current Month)</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="attendance-summary" *ngIf="attendanceSummary">
+              <div class="summary-grid">
+                <div class="summary-item">
+                  <div class="summary-value">{{ attendanceSummary.totalDays }}</div>
+                  <div class="summary-label">Total Days</div>
+                </div>
+                <div class="summary-item">
+                  <div class="summary-value">{{ attendanceSummary.presentDays }}</div>
+                  <div class="summary-label">Present Days</div>
+                </div>
+                <div class="summary-item">
+                  <div class="summary-value">{{ attendanceSummary.absentDays }}</div>
+                  <div class="summary-label">Absent Days</div>
+                </div>
+                <div class="summary-item">
+                  <div class="summary-value">{{ attendanceSummary.lateDays }}</div>
+                  <div class="summary-label">Late Days</div>
+                </div>
+                <div class="summary-item">
+                  <div class="summary-value">{{ attendanceSummary.totalWorkHours }}h</div>
+                  <div class="summary-label">Total Work Hours</div>
+                </div>
+                <div class="summary-item">
+                  <div class="summary-value">{{ attendanceSummary.totalOvertimeHours }}h</div>
+                  <div class="summary-label">Overtime Hours</div>
+                </div>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+
+  <!-- Loading Spinner -->
+  <div class="loading-container" *ngIf="isLoading">
+    <mat-spinner></mat-spinner>
+  </div>
+</div>

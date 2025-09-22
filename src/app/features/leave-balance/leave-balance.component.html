@@ -1,32 +1,89 @@
-<section class="page">
-  <h2>Leave Balance</h2>
-  
-  <div class="employee-info" *ngIf="currentEmployee">
-    <p><strong>Employee:</strong> {{ currentEmployee.Name }} ({{ currentEmployee.EmployeeID }})</p>
-    <p><strong>Total Leave Balance:</strong> {{ getTotalBalance() }} days</p>
+<section class="dashboard">
+  <div class="topbar">
+    <div>
+      <div class="hello" *ngIf="currentEmployee">Hello, {{ currentEmployee.Name }}!</div>
+    </div>
+    <button class="btn primary" (click)="goToLeaveRequest()">+ Request Leave</button>
   </div>
 
-  <div class="cards">
-    <div class="card" *ngFor="let b of balances">
-      <div class="header">
-        <div class="dot"></div>
-        <div class="label">{{ b.LeaveType }}</div>
+  <div class="grid">
+    <div class="left">
+      <div class="kpi-cards">
+        <div class="kpi-card">
+          <div class="kpi-title">Annual Leave</div>
+          <div class="ring" [style.--p]="getPercent('Vacation', 18) + '%'">
+            <span>{{ getBalanceFor('Vacation') }}</span>
+            <small>Days remaining</small>
+          </div>
+          <div class="meta">Accrued this year: 18 Days<br> Carried over: 2.5 Days</div>
+        </div>
+        <div class="kpi-card red">
+          <div class="kpi-title">Sick Leave</div>
+          <div class="ring" [style.--p]="getPercent('Sick', 10) + '%'">
+            <span>{{ getBalanceFor('Sick') }}</span>
+            <small>Days remaining</small>
+          </div>
+          <div class="meta">Total allowance: 10 Days</div>
+        </div>
       </div>
-      <div class="value">{{ b.BalanceDays }}</div>
-      <div class="sub">days left</div>
-      <div class="bar">
-        <span [style.width.%]="(b.BalanceDays / getMaxBalance()) * 100"></span>
+
+      <div class="panel">
+        <div class="panel-tabs">
+          <button [class.active]="activeTab==='ledger'" (click)="setTab('ledger')">Detailed Leave Ledger</button>
+          <button [class.active]="activeTab==='history'" (click)="setTab('history')">Leave History</button>
+        </div>
+        <div class="table-wrap" *ngIf="activeTab==='ledger'">
+          <table>
+            <thead>
+              <tr>
+                <th>Date Range</th>
+                <th>Type of Leave</th>
+                <th>Days</th>
+                <th>Status</th>
+                <th>Running Balance</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let r of ledgerRows">
+                <td>{{ r.dateRange }}</td>
+                <td>{{ r.type }}</td>
+                <td>{{ r.days }}</td>
+                <td><span class="badge ok" *ngIf="r.status==='Approved'">Approved</span>
+                    <span class="badge warn" *ngIf="r.status==='Pending'">Pending</span>
+                    <span class="badge err" *ngIf="r.status==='Rejected'">Rejected</span></td>
+                <td>{{ r.running }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
-  </div>
 
-  <div class="info-card">
-    <h3>Leave Balance Information</h3>
-    <ul>
-      <li>Leave balances are automatically updated when requests are approved</li>
-      <li>You cannot request more leave than your available balance</li>
-      <li>Balances reset annually according to company policy</li>
-    </ul>
+    <div class="right">
+      <div class="card side">
+        <div class="side-title">Leave Usage Analytics 2025</div>
+        <div class="donut">
+          <div class="donut-ring"></div>
+          <ul class="legend">
+            <li><span class="dot a"></span> Annual Leave Used</li>
+            <li><span class="dot b"></span> Sick Leave Used</li>
+            <li><span class="dot c"></span> Casual Available</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card side">
+        <div class="side-title">Year-End Projection</div>
+        <div class="projection">15.5 Days</div>
+        <div class="muted">Your estimated annual leave balance on Dec 31, 2025</div>
+      </div>
+      <div class="card side">
+        <div class="side-title">Quick Links</div>
+        <div class="quick-links">
+          <button class="ql" (click)="openCompanyPolicy()"><span class="icon">📄</span> View Company Leave Policy</button>
+          <button class="ql" (click)="downloadReport()"><span class="icon">⬇️</span> Download Leave Report</button>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 

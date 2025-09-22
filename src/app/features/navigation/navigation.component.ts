@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, RouterLinkActive, Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
+import { EmployeeService } from '../../services/employee.service';
 
 @Component({
   selector: 'app-navigation',
@@ -13,9 +14,11 @@ import { AuthService } from '../../services/auth.service';
 export class NavigationComponent {
   isManager = false;
   sidebarOpen = false;
+  myEmployeeId = '';
 
-  constructor(private auth: AuthService, private router: Router) {
+  constructor(private auth: AuthService, private router: Router, private employees: EmployeeService) {
     this.isManager = this.auth.currentUser()?.role === 'manager';
+    this.myEmployeeId = this.employees.getCurrentUser()?.EmployeeID || '';
   }
 
   toggleSidebar() {
@@ -31,5 +34,10 @@ export class NavigationComponent {
     if (!ok) return;
     this.auth.logout();
     this.router.navigate(['/login']);
+  }
+
+  goToMyProfile(): void {
+    const id = this.myEmployeeId || this.employees.getCurrentUser()?.EmployeeID || 'E1001';
+    this.router.navigate(['/employee-profile/profile', id]);
   }
 }
