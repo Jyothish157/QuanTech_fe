@@ -102,6 +102,12 @@ select {
 .password-input {
     width: 100%;
     padding-right: 40px !important;
+    appearance: none;
+}
+
+.password-input::-ms-reveal,
+.password-input::-ms-clear {
+  display: none;
 }
 
 .password-toggle {

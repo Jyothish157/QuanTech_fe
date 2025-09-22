@@ -12,9 +12,18 @@ import { AuthService } from '../../services/auth.service';
 })
 export class NavigationComponent {
   isManager = false;
+  sidebarOpen = false;
 
   constructor(private auth: AuthService, private router: Router) {
     this.isManager = this.auth.currentUser()?.role === 'manager';
+  }
+
+  toggleSidebar() {
+    this.sidebarOpen = !this.sidebarOpen;
+  }
+
+  closeSidebar() {
+    this.sidebarOpen = false;
   }
 
   logout() {

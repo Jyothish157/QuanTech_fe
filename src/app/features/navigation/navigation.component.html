@@ -1,7 +1,18 @@
-<nav class="sidebar">
+<!-- Hamburger button for mobile -->
+<button class="hamburger" (click)="toggleSidebar()" aria-label="Open navigation" *ngIf="!sidebarOpen">
+  <span></span>
+  <span></span>
+  <span></span>
+</button>
+
+<!-- Sidebar overlay for mobile -->
+<div class="sidebar-overlay" *ngIf="sidebarOpen" (click)="closeSidebar()"></div>
+
+<nav class="sidebar" [class.open]="sidebarOpen">
   <div class="sidebar-header">
     <div class="logo">
-      <div class="logo-icon">Q</div>
+      <div class="logo-icon"><img src="./file.jpg" alt="logo"
+        style="width: 50px;height: 50px;border-radius:50%;background:linear-gradient(135deg,#c471f5,#fa71cd);box-shadow:0 2px 12px rgba(0,0,0,0.15);"></div>
       <div class="logo-text">QuanTech</div>
     </div>
     <p class="role-badge" [class.manager]="isManager">
