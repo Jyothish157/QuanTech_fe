@@ -76,7 +76,9 @@
       <div class="tru-time">
         <div class="row" *ngFor="let emp of getEmployees()">
           <span class="name">{{ getEmployeeName(emp.EmployeeID) }}</span>
-          <div class="bar-wrap"><div class="bar-fill" [style.width.%]="(getEmployeeAverageHours(emp.EmployeeID) * 12.5) > 100 ? 100 : (getEmployeeAverageHours(emp.EmployeeID) * 12.5)"></div></div>
+          <div class="bar-wrap">
+            <div class="bar-fill" [style.width.%]="(getEmployeeAverageHours(emp.EmployeeID) * 12.5) > 100 ? 100 : (getEmployeeAverageHours(emp.EmployeeID) * 12.5)"></div>
+          </div>
           <span class="hrs">{{ getEmployeeAverageHours(emp.EmployeeID) }}h</span>
         </div>
       </div>
@@ -87,6 +89,7 @@
   <div class="card table-card">
     <div class="card-header">
       <div class="card-title">Attendance Report</div>
+      <!-- Single merged download method -->
       <button class="download-btn" (click)="downloadAttendanceReport()">
         <i class="fas fa-download"></i> Download PDF
       </button>
@@ -95,25 +98,31 @@
       <table class="table">
         <thead>
           <tr>
+            <th>ReportID</th>
             <th>EmployeeID</th>
             <th>Name</th>
             <th>Days Worked</th>
             <th>Total Hours</th>
             <th>Average Hours</th>
+            <th>Absent Days</th>
+            <th>Leave Balance</th>
+            <th>Date Range</th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let employee of getEmployees()">
+          <tr *ngFor="let employee of getEmployees(); let i = index">
+            <td>{{ 'RPT' + (i+1) }}</td>
             <td>{{ employee.EmployeeID }}</td>
             <td>{{ getEmployeeName(employee.EmployeeID) }}</td>
             <td>{{ getEmployeeAttendanceDays(employee.EmployeeID) }}</td>
             <td>{{ getEmployeeTotalHours(employee.EmployeeID) }}h</td>
             <td>{{ getEmployeeAverageHours(employee.EmployeeID) }}h</td>
+            <td>{{ getEmployeeAbsentDays(employee.EmployeeID) }}</td>
+            <td>{{ getEmployeeLeaveBalance(employee.EmployeeID) }}</td>
+            <td>{{ getCurrentMonthDateRange() }}</td>
           </tr>
         </tbody>
       </table>
     </div>
   </div>
 </section>
-
-

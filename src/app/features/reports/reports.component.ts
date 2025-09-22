@@ -22,7 +22,6 @@ export class ReportsComponent {
   currentEmployee: any;
   isManager = false;
 
-  // Chart configurations
   public pieChartOptions: Partial<any>;
   public leaveChartOptions: Partial<any>;
 
@@ -37,7 +36,7 @@ export class ReportsComponent {
     this.currentEmployee = this.employeeService.getCurrentUser();
     this.isManager = this.auth.currentUser()?.role === 'manager';
 
-    // Initialize Line Chart Options for Month-wise Leave
+    // Chart configs (leaveChartOptions & pieChartOptions) stay as you wrote them
     this.leaveChartOptions = {
       series: [{
         name: 'Leave Count',
@@ -77,9 +76,7 @@ export class ReportsComponent {
           style: {
             colors: '#64748b',
             fontSize: '11px'
-          },
-          rotateAlways: false,
-          hideOverlappingLabels: true
+          }
         },
         tickAmount: 12
       },
@@ -131,7 +128,6 @@ export class ReportsComponent {
       }
     };
 
-    // Initialize Pie Chart Options for Leave Distribution
     this.pieChartOptions = {
       series: this.generateLeaveData().percentages,
       chart: {
@@ -153,7 +149,7 @@ export class ReportsComponent {
       }],
       dataLabels: {
         enabled: true,
-        formatter: function(val: number) {
+        formatter: function (val: number) {
           return val.toFixed(1) + '%';
         }
       }
@@ -173,15 +169,11 @@ export class ReportsComponent {
   }
 
   private generateMonthWiseLeaveData(): number[] {
-    const year = 2025; // Current year
-    const months = Array.from({ length: 12 }, (_, i) => {
-      return new Date(year, i, 1);
-    });
-
+    const year = 2025;
+    const months = Array.from({ length: 12 }, (_, i) => new Date(year, i, 1));
     return months.map(date => {
       const startDate = new Date(date.getFullYear(), date.getMonth(), 1);
       const endDate = new Date(date.getFullYear(), date.getMonth() + 1, 0);
-
       return this.leaveData.filter(leave => {
         const leaveDate = new Date(leave.StartDate);
         return leaveDate >= startDate && leaveDate <= endDate && leave.Status === 'Approved';
@@ -193,30 +185,34 @@ export class ReportsComponent {
     const leaveTypes = ['Sick', 'Vacation', 'Casual'];
     const leaves = this.leaveData.filter(l => l.Status === 'Approved');
     const totalLeaves = leaves.length;
-    
     const data = leaveTypes.map(type => {
       const count = leaves.filter(l => l.LeaveType === type).length;
       const percentage = totalLeaves > 0 ? (count / totalLeaves) * 100 : 0;
       return { type, count, percentage: Math.round(percentage) };
     });
-
     return {
       percentages: data.map(item => item.percentage),
       labels: data.map(item => item.type)
     };
   }
+// ... inside ReportsComponent class
 
-  downloadAttendanceReport() {
-    const data = this.getEmployees().map(employee => ({
-      EmployeeID: employee.EmployeeID,
-      Name: this.getEmployeeName(employee.EmployeeID),
-      DaysWorked: this.getEmployeeAttendanceDays(employee.EmployeeID),
-      TotalHours: this.getEmployeeTotalHours(employee.EmployeeID),
-      AverageHours: this.getEmployeeAverageHours(employee.EmployeeID)
-    }));
+downloadAttendanceReport() {
+  const dateRange = this.getCurrentMonthDateRange();
+  const data = this.getEmployees().map((employee, index) => ({
+    ReportID: 'RPT' + (index + 1),
+    EmployeeID: employee.EmployeeID,
+    Name: this.getEmployeeName(employee.EmployeeID),
+    DaysWorked: this.getEmployeeAttendanceDays(employee.EmployeeID),
+    TotalHours: this.getEmployeeTotalHours(employee.EmployeeID),
+    AverageHours: this.getEmployeeAverageHours(employee.EmployeeID),
+    AbsentDays: this.getEmployeeAbsentDays(employee.EmployeeID),
+    LeaveBalance: this.getEmployeeLeaveBalance(employee.EmployeeID),
+    DateRange: dateRange
+  }));
+  this.downloadService.downloadAsPDF('attendance_report', data);
+}
 
-    this.downloadService.downloadAsPDF('attendance_report', data);
-  }
 
   get totalWorkHours(): number {
     return this.attendanceData
@@ -239,8 +235,7 @@ export class ReportsComponent {
 
   get shiftCoverage(): { shift: string; coverage: number }[] {
     const shifts = ['Morning', 'Evening', 'Night'];
-    const totalDays = 7; // Last 7 days
-    
+    const totalDays = 7; 
     return shifts.map(shift => {
       const shiftCount = this.shiftData.filter(s => s.ShiftType === shift).length;
       const coverage = (shiftCount / (totalDays * this.employeeService.getEmployees().length)) * 100;
@@ -251,10 +246,6 @@ export class ReportsComponent {
   getEmployeeName(employeeId: string): string {
     const employee = this.employeeService.getEmployee(employeeId);
     return employee ? employee.Name : employeeId;
-  }
-
-  getTotalDaysWorked(): number {
-    return this.attendanceData.filter(a => a.WorkHours).length;
   }
 
   getEmployees(): any[] {
@@ -274,10 +265,50 @@ export class ReportsComponent {
   getEmployeeAverageHours(employeeId: string): number {
     const workedDays = this.attendanceData.filter(a => a.EmployeeID === employeeId && a.WorkHours);
     if (workedDays.length === 0) return 0;
-    
     const totalHours = workedDays.reduce((total, a) => total + (a.WorkHours || 0), 0);
     return Math.round((totalHours / workedDays.length) * 100) / 100;
   }
+
+  // 🔹 NEW METHODS 🔹
+  private getWorkingDaysInCurrentMonth(): number {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = today.getMonth();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    let workingDays = 0;
+    for (let day = 1; day <= daysInMonth; day++) {
+      const date = new Date(year, month, day);
+      const dayOfWeek = date.getDay();
+      if (dayOfWeek !== 0 && dayOfWeek !== 6) {
+        workingDays++;
+      }
+    }
+    return workingDays;
+  }
+
+  getEmployeeAbsentDays(employeeId: string): number {
+    const expectedDays = this.getWorkingDaysInCurrentMonth();
+    const workedDays = this.getEmployeeAttendanceDays(employeeId);
+    return expectedDays - workedDays < 0 ? 0 : expectedDays - workedDays;
+  }
+
+  getEmployeeLeaveBalance(employeeId: string): number {
+    const totalAllowedLeaves = 20;
+    const currentYear = new Date().getFullYear();
+    const approvedLeaves = this.leaveData.filter(l =>
+      l.EmployeeID === employeeId &&
+      l.Status === 'Approved' &&
+      new Date(l.StartDate).getFullYear() === currentYear
+    ).length;
+    return totalAllowedLeaves - approvedLeaves < 0 ? 0 : totalAllowedLeaves - approvedLeaves;
+  }
+  getCurrentMonthDateRange(): string {
+  const today = new Date();
+  const start = new Date(today.getFullYear(), today.getMonth(), 1);
+  const end = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+  return `${start.toLocaleDateString()} - ${end.toLocaleDateString()}`;
 }
 
 
+
+}
