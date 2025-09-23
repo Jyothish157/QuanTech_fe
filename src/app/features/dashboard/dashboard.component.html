@@ -60,21 +60,6 @@
       </div>
     </div>
   </div>
-
-  <div class="card" *ngIf="currentEmployee">
-    <div class="card-title">Employee Information</div>
-    <div class="employee-info">
-      <p><strong>Name:</strong> {{ currentEmployee.Name }}</p>
-      <p><strong>Employee ID:</strong> {{ currentEmployee.EmployeeID }}</p>
-      <p><strong>Department:</strong> {{ currentEmployee.Department }}</p>
-      <p><strong>Role:</strong> {{ currentEmployee?.Role }}</p>
-      <p><strong>Status:</strong> 
-        <span class="badge" [class.present]="isClockedIn" [class.absent]="!isClockedIn">
-          {{ isClockedIn ? 'Clocked In' : 'Clocked Out' }}
-        </span>
-      </p>
-    </div>
-  </div>
 </section>
 
 

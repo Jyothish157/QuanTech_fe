@@ -26,7 +26,8 @@ export class DashboardComponent {
     private shiftService: ShiftService,
     private employeeService: EmployeeService
   ) {
-    this.currentEmployee = this.employeeService.getCurrentUser();
+    const currentEmployeeId = this.auth.getCurrentEmployeeId() || 'E1001';
+    this.currentEmployee = this.employeeService.getEmployee(currentEmployeeId);
     this.isManager = this.auth.currentUser()?.role === 'manager';
   }
 

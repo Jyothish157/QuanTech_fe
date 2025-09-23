@@ -16,7 +16,7 @@
       <div class="logo-text">QuanTech</div>
     </div>
     <p class="role-badge" [class.manager]="isManager">
-      {{ isManager ? 'Manager' : 'Employee' }}
+      {{ currentEmployee?.Name || (isManager ? 'Manager' : 'Employee') }}
     </p>
     <button class="profile-btn" (click)="goToMyProfile()" title="My Profile">👤 My Profile</button>
   </div>

@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { DownloadService } from '../../services/download.service';
 import { LeaveService } from '../../services/leave.service';
 import { EmployeeService } from '../../services/employee.service';
+import { AuthService } from '../../services/auth.service';
 import { LeaveBalance } from '../../models/leave.model';
 
 @Component({
@@ -15,22 +16,28 @@ import { LeaveBalance } from '../../models/leave.model';
 })
 export class LeaveBalanceComponent {
   currentEmployee: any;
-  activeTab: 'ledger' | 'history' = 'ledger';
 
-  // Dummy ledger rows to visualize table like the mock
-  ledgerRows: { dateRange: string; type: string; days: number; status: 'Approved' | 'Rejected' | 'Pending'; running: number }[] = [
-    { dateRange: 'Jan 01 - Jan 01, 2025', type: 'Auto-Accrued', days: 1, status: 'Approved', running: 13 },
-    { dateRange: 'Feb 01 - Feb 01, 2025', type: 'Auto-Accrued', days: 1, status: 'Approved', running: 14 },
-    { dateRange: 'Mar 01 - Mar 01, 2025', type: 'Auto-Accrued', days: 1, status: 'Approved', running: 15 },
+  // Enhanced dummy history data
+  historyRows: { dateRange: string; type: string; days: number; status: 'Approved' | 'Rejected' | 'Pending'; reason: string }[] = [
+    { dateRange: 'Dec 20 - Dec 31, 2024', type: 'Vacation Leave', days: 10, status: 'Approved', reason: 'Year-end holidays' },
+    { dateRange: 'Nov 15 - Nov 15, 2024', type: 'Sick Leave', days: 1, status: 'Approved', reason: 'Medical appointment' },
+    { dateRange: 'Oct 05 - Oct 06, 2024', type: 'Casual Leave', days: 2, status: 'Approved', reason: 'Personal work' },
+    { dateRange: 'Sep 23 - Sep 25, 2024', type: 'Sick Leave', days: 3, status: 'Approved', reason: 'Fever and flu' },
+    { dateRange: 'Aug 10 - Aug 12, 2024', type: 'Vacation Leave', days: 3, status: 'Rejected', reason: 'Project deadline conflict' },
+    { dateRange: 'Jul 22 - Jul 23, 2024', type: 'Casual Leave', days: 2, status: 'Approved', reason: 'Family event' },
+    { dateRange: 'Jun 15 - Jun 17, 2024', type: 'Sick Leave', days: 3, status: 'Approved', reason: 'Medical treatment' },
+    { dateRange: 'May 20 - May 31, 2024', type: 'Vacation Leave', days: 12, status: 'Approved', reason: 'Summer vacation' }
   ];
 
   constructor(
     private leaveService: LeaveService,
     private employeeService: EmployeeService,
     private router: Router,
-    private download: DownloadService
+    private download: DownloadService,
+    private auth: AuthService
   ) {
-    this.currentEmployee = this.employeeService.getCurrentUser();
+    const currentEmployeeId = this.auth.getCurrentEmployeeId() || 'E1001';
+    this.currentEmployee = this.employeeService.getEmployee(currentEmployeeId);
   }
 
   get balances(): LeaveBalance[] {
@@ -48,7 +55,15 @@ export class LeaveBalanceComponent {
 
   getBalanceFor(type: string): number {
     const found = this.balances.find(b => b.LeaveType === type);
-    return found ? found.BalanceDays : 0;
+    if (found) return found.BalanceDays;
+    
+    // Default values for demo purposes
+    switch(type) {
+      case 'Sick': return 8;
+      case 'Casual': return 10;
+      case 'Vacation': return 13;
+      default: return 0;
+    }
   }
 
   getPercent(type: string, allowance: number): number {
@@ -56,6 +71,22 @@ export class LeaveBalanceComponent {
     if (allowance <= 0) return 0;
     const p = (val / allowance) * 100;
     return Math.max(0, Math.min(100, Math.round(p)));
+  }
+
+  // Calculate percentage for CSS conic-gradient
+  getSickPercent(): number {
+    const total = this.getBalanceFor('Sick') + this.getBalanceFor('Casual') + this.getBalanceFor('Vacation');
+    return total > 0 ? Math.round((this.getBalanceFor('Sick') / total) * 100) : 33;
+  }
+
+  getCasualPercent(): number {
+    const total = this.getBalanceFor('Sick') + this.getBalanceFor('Casual') + this.getBalanceFor('Vacation');
+    return total > 0 ? Math.round((this.getBalanceFor('Casual') / total) * 100) : 33;
+  }
+
+  getVacationPercent(): number {
+    const total = this.getBalanceFor('Sick') + this.getBalanceFor('Casual') + this.getBalanceFor('Vacation');
+    return total > 0 ? Math.round((this.getBalanceFor('Vacation') / total) * 100) : 34;
   }
 
   goToLeaveRequest(): void {
@@ -67,20 +98,35 @@ export class LeaveBalanceComponent {
   }
 
   openCompanyPolicy(): void {
-    this.router.navigate(['/company-policy']);
-  }
-
-  setTab(tab: 'ledger' | 'history'): void {
-    this.activeTab = tab;
-    if (tab === 'history') {
-      this.openLeaveHistory();
-    }
+    // Create dummy PDF content and download
+    this.downloadDummyPDF('leave_policy.pdf', 'Company Leave Policy');
   }
 
   downloadReport(): void {
-    const header = ['Date Range', 'Type', 'Days', 'Status', 'Running Balance'];
-    const lines = [header.join(','), ...this.ledgerRows.map(r => [r.dateRange, r.type, String(r.days), r.status, String(r.running)].join(','))];
-    this.download.downloadText(lines.join('\n'), 'leave-report.csv', 'text/csv;charset=utf-8');
+    // Create dummy PDF content and download
+    this.downloadDummyPDF('leave_report.pdf', 'Leave Report 2025');
+  }
+
+  private downloadDummyPDF(filename: string, title: string): void {
+    // Create a simple text content for the dummy PDF
+    const content = `${title}\n\nGenerated on: ${new Date().toLocaleDateString()}\n\nThis is a dummy ${title.toLowerCase()} file for demonstration purposes.\n\nLeave Balance Summary:\n- Sick Leave: ${this.getBalanceFor('Sick')} days\n- Casual Leave: ${this.getBalanceFor('Casual')} days\n- Vacation Leave: ${this.getBalanceFor('Vacation')} days\n\nTotal Available: ${this.getBalanceFor('Sick') + this.getBalanceFor('Casual') + this.getBalanceFor('Vacation')} days`;
+    
+    // Create a blob and download it as a text file (simulating PDF download)
+    const blob = new Blob([content], { type: 'application/pdf' });
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
+  }
+
+  refreshBalance(): void {
+    // Simulate refreshing the data
+    console.log('Refreshing leave balance data...');
+    // In a real app, you would call the service to refresh data
   }
 }
 

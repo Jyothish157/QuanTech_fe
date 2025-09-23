@@ -10,6 +10,14 @@ export interface Employee {
   Role: 'Employee' | 'Manager';
   Username?: string;
   Password?: string;
+  JoiningDate?: string;
+  ManagerID?: string;
+}
+
+export interface ChangePasswordRequest {
+  currentPassword: string;
+  newPassword: string;
+  confirmPassword: string;
 }
 
 

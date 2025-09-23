@@ -1,0 +1,265 @@
+<div class="my-profile-container" *ngIf="employee() as emp">
+  <!-- Header Section -->
+  <div class="profile-header">
+    <div class="user-info">
+      <div class="avatar">
+        <span>{{ emp.Name.charAt(0).toUpperCase() }}</span>
+      </div>
+      <div class="user-details">
+        <h1>{{ emp.Name }}</h1>
+        <p class="role-badge" [class.manager]="emp.Role === 'Manager'">
+          {{ emp.Role }}
+        </p>
+        <p class="employee-id">Employee ID: {{ emp.EmployeeID }}</p>
+      </div>
+    </div>
+    <div class="action-buttons">
+      <button 
+        class="btn secondary" 
+        (click)="toggleEditMode()"
+        *ngIf="!isEditMode() && !showChangePassword()"
+      >
+        <span class="icon">✏️</span>
+        Edit Profile
+      </button>
+      
+      <!-- Edit Mode Buttons -->
+      <div class="edit-buttons" *ngIf="isEditMode()">
+        <button class="btn secondary" (click)="toggleEditMode()">
+          <span class="icon">❌</span>
+          Cancel
+        </button>
+        <button class="btn primary" (click)="saveProfile()" [disabled]="loading()">
+          <span *ngIf="loading()" class="spinner"></span>
+          <span class="icon" *ngIf="!loading()">💾</span>
+          {{ loading() ? 'Saving...' : 'Save Changes' }}
+        </button>
+      </div>
+      
+      <!-- Default Action Buttons -->
+      <button 
+        class="btn primary" 
+        (click)="toggleChangePassword()"
+        *ngIf="!isEditMode()"
+      >
+        <span class="icon">🔒</span>
+        Change Password
+      </button>
+    </div>
+  </div>
+
+  <!-- Message Display -->
+  <div *ngIf="message()" class="message" [class.success]="messageType() === 'success'" [class.error]="messageType() === 'error'">
+    {{ message() }}
+  </div>
+
+  <!-- Personal Information Section -->
+  <div class="info-section" *ngIf="!isEditMode()">
+    <h2>Personal Information</h2>
+    <div class="info-grid">
+      <div class="info-item">
+        <label>Full Name</label>
+        <span>{{ emp.Name }}</span>
+      </div>
+      
+      <div class="info-item">
+        <label>Employee ID</label>
+        <span>{{ emp.EmployeeID }}</span>
+      </div>
+      
+      <div class="info-item">
+        <label>Email Address</label>
+        <span>{{ emp.Email || '-' }}</span>
+      </div>
+      
+      <div class="info-item">
+        <label>Phone Number</label>
+        <span>{{ emp.Phone || '-' }}</span>
+      </div>
+      
+      <div class="info-item">
+        <label>Date of Birth</label>
+        <span>{{ formatDate(emp.DOB) }}</span>
+      </div>
+      
+      <div class="info-item">
+        <label>Joining Date</label>
+        <span>{{ formatDate(emp.JoiningDate) }}</span>
+      </div>
+      
+      <div class="info-item full-width">
+        <label>Address</label>
+        <span>{{ emp.Address || '-' }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Personal Information Section -->
+  <div class="info-section" *ngIf="isEditMode() && editableEmployee() as editEmp">
+    <h2>Edit Personal Information</h2>
+    <form class="edit-form" (ngSubmit)="saveProfile()">
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="editName">Full Name *</label>
+          <input 
+            type="text" 
+            id="editName"
+            [(ngModel)]="editEmp.Name"
+            name="editName"
+            required
+            placeholder="Enter your full name"
+          >
+        </div>
+        
+        <div class="form-group">
+          <label for="editEmployeeId">Employee ID</label>
+          <input 
+            type="text" 
+            id="editEmployeeId"
+            [value]="editEmp.EmployeeID"
+            disabled
+            class="disabled-field"
+          >
+        </div>
+        
+        <div class="form-group">
+          <label for="editEmail">Email Address</label>
+          <input 
+            type="email" 
+            id="editEmail"
+            [(ngModel)]="editEmp.Email"
+            name="editEmail"
+            placeholder="Enter your email address"
+          >
+        </div>
+        
+        <div class="form-group">
+          <label for="editPhone">Phone Number</label>
+          <input 
+            type="tel" 
+            id="editPhone"
+            [(ngModel)]="editEmp.Phone"
+            name="editPhone"
+            placeholder="Enter your phone number"
+          >
+        </div>
+        
+        <div class="form-group">
+          <label for="editDOB">Date of Birth</label>
+          <input 
+            type="date" 
+            id="editDOB"
+            [(ngModel)]="editEmp.DOB"
+            name="editDOB"
+          >
+        </div>
+        
+        <div class="form-group">
+          <label for="editJoiningDate">Joining Date</label>
+          <input 
+            type="date" 
+            id="editJoiningDate"
+            [(ngModel)]="editEmp.JoiningDate"
+            name="editJoiningDate"
+          >
+        </div>
+        
+        <div class="form-group full-width">
+          <label for="editAddress">Address</label>
+          <textarea 
+            id="editAddress"
+            [(ngModel)]="editEmp.Address"
+            name="editAddress"
+            rows="3"
+            placeholder="Enter your complete address"
+          ></textarea>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <!-- Work Information Section -->
+  <div class="info-section">
+    <h2>Work Information</h2>
+    <div class="info-grid">
+      <div class="info-item">
+        <label>Department</label>
+        <span>{{ emp.Department }}</span>
+      </div>
+      
+      <div class="info-item">
+        <label>Designation</label>
+        <span>{{ emp.Designation || emp.Role }}</span>
+      </div>
+      
+      <div class="info-item">
+        <label>Role</label>
+        <span class="role-tag" [class.manager]="emp.Role === 'Manager'">{{ emp.Role }}</span>
+      </div>
+      
+      <div class="info-item" *ngIf="emp.Role === 'Employee'">
+        <label>Manager</label>
+        <span>{{ getManagerName() }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Change Password Section -->
+  <div class="info-section" *ngIf="showChangePassword()">
+    <h2>Change Password</h2>
+    <form class="password-form" (ngSubmit)="onChangePassword()">
+      <div class="form-group">
+        <label for="currentPassword">Current Password</label>
+        <input 
+          type="password" 
+          id="currentPassword"
+          [(ngModel)]="changePasswordForm.currentPassword"
+          name="currentPassword"
+          required
+          placeholder="Enter your current password"
+        >
+      </div>
+      
+      <div class="form-group">
+        <label for="newPassword">New Password</label>
+        <input 
+          type="password" 
+          id="newPassword"
+          [(ngModel)]="changePasswordForm.newPassword"
+          name="newPassword"
+          required
+          placeholder="Enter new password (min 6 characters)"
+          minlength="6"
+        >
+      </div>
+      
+      <div class="form-group">
+        <label for="confirmPassword">Confirm New Password</label>
+        <input 
+          type="password" 
+          id="confirmPassword"
+          [(ngModel)]="changePasswordForm.confirmPassword"
+          name="confirmPassword"
+          required
+          placeholder="Confirm your new password"
+        >
+      </div>
+      
+      <div class="form-actions">
+        <button type="button" class="btn secondary" (click)="toggleChangePassword()">
+          Cancel
+        </button>
+        <button type="submit" class="btn primary" [disabled]="loading()">
+          <span *ngIf="loading()" class="spinner"></span>
+          {{ loading() ? 'Changing...' : 'Change Password' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Loading State -->
+<div class="loading-container" *ngIf="!employee()">
+  <div class="spinner-large"></div>
+  <p>Loading profile...</p>
+</div>

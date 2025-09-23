@@ -3,13 +3,6 @@
 
   <!-- KPI Row -->
   <div class="kpi-row">
-    <div class="kpi" style="--c:#5C3AFF">
-      <div class="icon">⏱️</div>
-      <div class="meta">
-        <div class="title">Total Work Hours</div>
-        <div class="value">{{ totalWorkHours }}h</div>
-      </div>
-    </div>
     <div class="kpi" style="--c:#58C4A8">
       <div class="icon">📈</div>
       <div class="meta">
@@ -49,24 +42,28 @@
       ></apx-chart>
     </div>
 
-    <div class="card">
-      <div class="card-title">Leave Distribution</div>
-      <apx-chart
-        [series]="pieChartOptions['series']"
-        [chart]="pieChartOptions['chart']"
-        [labels]="pieChartOptions['labels']"
-        [responsive]="pieChartOptions['responsive']"
-        [dataLabels]="pieChartOptions['dataLabels']"
-      ></apx-chart>
-    </div>
-
-    <div class="card">
-      <div class="card-title">Shift Coverage</div>
-      <div class="shift-coverage">
-        <div class="coverage-item" *ngFor="let coverage of shiftCoverage">
-          <div class="coverage-label">{{ coverage.shift }}</div>
-          <div class="coverage-bar"><div class="coverage-fill" [style.width.%]="coverage.coverage"></div></div>
-          <div class="coverage-value">{{ coverage.coverage }}%</div>
+    <div class="card combined-card">
+      <div class="combined-sections">
+        <div class="section">
+          <div class="card-title">Leave Distribution</div>
+          <apx-chart
+            [series]="pieChartOptions['series']"
+            [chart]="pieChartOptions['chart']"
+            [labels]="pieChartOptions['labels']"
+            [responsive]="pieChartOptions['responsive']"
+            [dataLabels]="pieChartOptions['dataLabels']"
+          ></apx-chart>
+        </div>
+        
+        <div class="section">
+          <div class="card-title">Shift Coverage</div>
+          <div class="shift-coverage">
+            <div class="coverage-item" *ngFor="let coverage of shiftCoverage">
+              <div class="coverage-label">{{ coverage.shift }}</div>
+              <div class="coverage-bar"><div class="coverage-fill" [style.width.%]="coverage.coverage"></div></div>
+              <div class="coverage-value">{{ coverage.coverage }}%</div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

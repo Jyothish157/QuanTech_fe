@@ -15,10 +15,13 @@ export class NavigationComponent {
   isManager = false;
   sidebarOpen = false;
   myEmployeeId = '';
+  currentEmployee: any;
 
   constructor(private auth: AuthService, private router: Router, private employees: EmployeeService) {
     this.isManager = this.auth.currentUser()?.role === 'manager';
-    this.myEmployeeId = this.employees.getCurrentUser()?.EmployeeID || '';
+    this.myEmployeeId = this.auth.getCurrentEmployeeId() || 'E1001';
+    // Get the current user based on the authenticated employee ID
+    this.currentEmployee = this.employees.getEmployee(this.myEmployeeId);
   }
 
   toggleSidebar() {
@@ -37,7 +40,7 @@ export class NavigationComponent {
   }
 
   goToMyProfile(): void {
-    const id = this.myEmployeeId || this.employees.getCurrentUser()?.EmployeeID || 'E1001';
-    this.router.navigate(['/employee-profile/profile', id]);
+    const id = this.myEmployeeId;
+    this.router.navigate(['/my-profile']);
   }
 }

@@ -6,9 +6,11 @@ h2{text-align:center;color:#2D1B69;margin:0 0 .5rem}
 .kpi .title{color:#6b7280;font-size:.9rem}
 .kpi .value{color:#2D1B69;font-weight:800;font-size:1.25rem}
 
-.charts-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1rem}
-.card{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:1rem}
-.card-title{font-weight:700;color:#2D1B69;margin-bottom:.5rem}
+.charts-row{display:grid;grid-template-columns:1fr;gap:1rem;align-items:stretch}
+.card{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:1rem;min-height:400px;display:flex;flex-direction:column}
+.card:nth-child(2){min-height:220px}
+.card:nth-child(3) .tru-time{flex:0 0 auto}
+.card-title{font-weight:700;color:#2D1B69;margin-bottom:.5rem;flex-shrink:0}
 .chart{display:flex;gap:.5rem;align-items:flex-end;height:160px}
 .bar{flex:1;background:linear-gradient(180deg,#22c55e,#059669);border-radius:6px}
 .chart-labels{display:flex;justify-content:space-between;color:#6b7280;font-size:.8rem;margin-top:.35rem}
@@ -20,12 +22,12 @@ h2{text-align:center;color:#2D1B69;margin:0 0 .5rem}
 .dot{display:inline-block;width:10px;height:10px;border-radius:999px;margin-right:.35rem}
 .dot.v{background:#3b82f6}.dot.s{background:#ef4444}.dot.c{background:#a78bfa}
 
-.shift-coverage{display:grid;gap:.5rem}
+.shift-coverage{display:grid;gap:.5rem;flex:1;align-content:start}
 .coverage-item{display:grid;grid-template-columns:90px 1fr auto;align-items:center;gap:.5rem}
 .coverage-bar{background:#f3f4f6;border-radius:999px;overflow:hidden;height:10px}
 .coverage-fill{background:linear-gradient(135deg,#5C3AFF,#8C6EFF);height:100%}
 
-.tru-time{display:grid;gap:.35rem}
+.tru-time{display:grid;gap:.35rem;align-content:start;padding-bottom:0}
 .tru-time .row{display:grid;grid-template-columns:160px 1fr auto;gap:.5rem;align-items:center}
 .bar-wrap{background:#f3f4f6;border-radius:10px;overflow:hidden;height:10px}
 .bar-fill{background:#34d399;height:100%}
@@ -61,3 +63,101 @@ h2{text-align:center;color:#2D1B69;margin:0 0 .5rem}
 .table-scroll{overflow:auto}
 .table{width:100%;border-collapse:collapse}
 .table th,.table td{text-align:left;padding:.75rem;border-top:1px solid #f3f4f6}
+
+/* ApexChart container styling for uniform card heights */
+apx-chart {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Ensure chart content fills available space */
+.card apx-chart > div {
+  height: 100% !important;
+  min-height: 300px;
+}
+
+/* Responsive adjustments for consistent card layout */
+@media (max-width: 1200px) {
+  .charts-row {
+    grid-template-columns: 1fr;
+  }
+  
+  .card {
+    min-height: 380px;
+  }
+  
+  .card:nth-child(2) {
+    min-height: 200px;
+  }
+  
+  .combined-sections {
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .charts-row {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .card {
+    min-height: 350px;
+  }
+  
+  .card:nth-child(2) {
+    min-height: 180px;
+  }
+  
+  .combined-sections {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  
+  .tru-time .row {
+    grid-template-columns: 120px 1fr auto;
+  }
+  
+  .tru-time {
+    flex: 0 0 auto;
+  }
+  
+  .coverage-item {
+    grid-template-columns: 80px 1fr auto;
+  }
+}
+
+/* Combined card styling for Leave Distribution + Shift Coverage */
+.combined-card {
+  min-height: 400px;
+}
+
+.combined-sections {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  height: 100%;
+  flex: 1;
+}
+
+.combined-sections .section {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.combined-sections .section .card-title {
+  margin-bottom: 0.75rem;
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 0.5rem;
+}
+
+.combined-sections .section apx-chart {
+  flex: 1;
+}
+
+.combined-sections .section .shift-coverage {
+  flex: 1;
+  align-content: start;
+}

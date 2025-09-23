@@ -1,38 +1,62 @@
 <section class="dashboard">
   <div class="topbar">
     <div>
-      <div class="hello" *ngIf="currentEmployee">Hello, {{ currentEmployee.Name }}!</div>
     </div>
     <button class="btn primary" (click)="goToLeaveRequest()">+ Request Leave</button>
   </div>
 
   <div class="grid">
     <div class="left">
-      <div class="kpi-cards">
-        <div class="kpi-card">
-          <div class="kpi-title">Annual Leave</div>
-          <div class="ring" [style.--p]="getPercent('Vacation', 18) + '%'">
-            <span>{{ getBalanceFor('Vacation') }}</span>
-            <small>Days remaining</small>
+      <!-- Custom 3D Doughnut Chart Section -->
+      <div class="chart-section">
+        <div class="chart-title">Leave Balance Overview</div>
+        <div class="chart-container">
+          <!-- Custom CSS 3D Doughnut Chart -->
+          <div class="custom-doughnut-chart">
+            <div class="doughnut-3d" 
+                 [style.background]="'conic-gradient(
+                   #E05757 0deg ' + getSickPercent() * 3.6 + 'deg,
+                   #FF8C42 ' + getSickPercent() * 3.6 + 'deg ' + (getSickPercent() + getCasualPercent()) * 3.6 + 'deg,
+                   #22C55E ' + (getSickPercent() + getCasualPercent()) * 3.6 + 'deg 360deg
+                 )'">
+              <div class="doughnut-center">
+                <div class="total-label">Total Leave</div>
+                <div class="total-value">{{ getBalanceFor('Sick') + getBalanceFor('Casual') + getBalanceFor('Vacation') }}</div>
+                <div class="total-unit">Days Available</div>
+              </div>
+            </div>
           </div>
-          <div class="meta">Accrued this year: 18 Days<br> Carried over: 2.5 Days</div>
         </div>
-        <div class="kpi-card red">
-          <div class="kpi-title">Sick Leave</div>
-          <div class="ring" [style.--p]="getPercent('Sick', 10) + '%'">
-            <span>{{ getBalanceFor('Sick') }}</span>
-            <small>Days remaining</small>
+        <div class="balance-summary">
+          <div class="balance-item sick">
+            <span class="balance-dot"></span>
+            <span class="balance-label">Sick Leave</span>
+            <span class="balance-value">{{ getBalanceFor('Sick') }} days</span>
           </div>
-          <div class="meta">Total allowance: 10 Days</div>
+          <div class="balance-item casual">
+            <span class="balance-dot"></span>
+            <span class="balance-label">Casual Leave</span>
+            <span class="balance-value">{{ getBalanceFor('Casual') }} days</span>
+          </div>
+          <div class="balance-item vacation">
+            <span class="balance-dot"></span>
+            <span class="balance-label">Vacation Leave</span>
+            <span class="balance-value">{{ getBalanceFor('Vacation') }} days</span>
+          </div>
         </div>
       </div>
 
+      <!-- Leave History Panel -->
       <div class="panel">
-        <div class="panel-tabs">
-          <button [class.active]="activeTab==='ledger'" (click)="setTab('ledger')">Detailed Leave Ledger</button>
-          <button [class.active]="activeTab==='history'" (click)="setTab('history')">Leave History</button>
+        <div class="panel-header">
+          <div class="panel-title">Leave History</div>
+          <button class="btn secondary report-btn" (click)="downloadReport()">
+            <span class="icon">⬇️</span> Download Report
+          </button>
         </div>
-        <div class="table-wrap" *ngIf="activeTab==='ledger'">
+        
+        <!-- Leave History Table -->
+        <div class="table-wrap">
           <table>
             <thead>
               <tr>
@@ -40,18 +64,26 @@
                 <th>Type of Leave</th>
                 <th>Days</th>
                 <th>Status</th>
-                <th>Running Balance</th>
+                <th>Reason</th>
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let r of ledgerRows">
-                <td>{{ r.dateRange }}</td>
-                <td>{{ r.type }}</td>
-                <td>{{ r.days }}</td>
-                <td><span class="badge ok" *ngIf="r.status==='Approved'">Approved</span>
-                    <span class="badge warn" *ngIf="r.status==='Pending'">Pending</span>
-                    <span class="badge err" *ngIf="r.status==='Rejected'">Rejected</span></td>
-                <td>{{ r.running }}</td>
+              <tr *ngFor="let h of historyRows">
+                <td>{{ h.dateRange }}</td>
+                <td>
+                  <span class="leave-type" [ngClass]="{
+                    'sick': h.type.includes('Sick'),
+                    'casual': h.type.includes('Casual'),
+                    'vacation': h.type.includes('Vacation')
+                  }">{{ h.type }}</span>
+                </td>
+                <td>{{ h.days }}</td>
+                <td>
+                  <span class="badge ok" *ngIf="h.status==='Approved'">Approved</span>
+                  <span class="badge warn" *ngIf="h.status==='Pending'">Pending</span>
+                  <span class="badge err" *ngIf="h.status==='Rejected'">Rejected</span>
+                </td>
+                <td class="reason">{{ h.reason }}</td>
               </tr>
             </tbody>
           </table>
@@ -60,27 +92,84 @@
     </div>
 
     <div class="right">
-      <div class="card side">
-        <div class="side-title">Leave Usage Analytics 2025</div>
-        <div class="donut">
-          <div class="donut-ring"></div>
-          <ul class="legend">
-            <li><span class="dot a"></span> Annual Leave Used</li>
-            <li><span class="dot b"></span> Sick Leave Used</li>
-            <li><span class="dot c"></span> Casual Available</li>
-          </ul>
-        </div>
-      </div>
-      <div class="card side">
+      <!-- Year-End Projection Card -->
+      <div class="card side projection-card">
         <div class="side-title">Year-End Projection</div>
         <div class="projection">15.5 Days</div>
         <div class="muted">Your estimated annual leave balance on Dec 31, 2025</div>
+        <div class="projection-details">
+          <div class="projection-item">
+            <span class="proj-label">Current Balance:</span>
+            <span class="proj-value">{{ getBalanceFor('Vacation') + getBalanceFor('Casual') + getBalanceFor('Sick') }} days</span>
+          </div>
+          <div class="projection-item">
+            <span class="proj-label">Expected Accrual:</span>
+            <span class="proj-value">+12 days</span>
+          </div>
+          <div class="projection-item">
+            <span class="proj-label">Planned Usage:</span>
+            <span class="proj-value">-27.5 days</span>
+          </div>
+        </div>
       </div>
-      <div class="card side">
+
+      <!-- Leave Usage Analytics Card -->
+      <div class="card side analytics-card">
+        <div class="side-title">Leave Usage Analytics 2025</div>
+        <div class="usage-stats">
+          <div class="usage-item">
+            <div class="usage-header">
+              <span class="usage-type sick">Sick Leave</span>
+              <span class="usage-percent">20%</span>
+            </div>
+            <div class="usage-bar">
+              <div class="usage-fill sick" style="width: 20%"></div>
+            </div>
+            <div class="usage-text">2 of 10 days used</div>
+          </div>
+          
+          <div class="usage-item">
+            <div class="usage-header">
+              <span class="usage-type casual">Casual Leave</span>
+              <span class="usage-percent">30%</span>
+            </div>
+            <div class="usage-bar">
+              <div class="usage-fill casual" style="width: 30%"></div>
+            </div>
+            <div class="usage-text">3 of 10 days used</div>
+          </div>
+          
+          <div class="usage-item">
+            <div class="usage-header">
+              <span class="usage-type vacation">Vacation Leave</span>
+              <span class="usage-percent">38%</span>
+            </div>
+            <div class="usage-bar">
+              <div class="usage-fill vacation" style="width: 38%"></div>
+            </div>
+            <div class="usage-text">5 of 13 days used</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Enhanced Quick Links Card -->
+      <div class="card side quick-links-card">
         <div class="side-title">Quick Links</div>
         <div class="quick-links">
-          <button class="ql" (click)="openCompanyPolicy()"><span class="icon">📄</span> View Company Leave Policy</button>
-          <button class="ql" (click)="downloadReport()"><span class="icon">⬇️</span> Download Leave Report</button>
+          <button class="ql policy-btn" (click)="openCompanyPolicy()">
+            <span class="icon">📄</span> 
+            <div class="ql-content">
+              <div class="ql-title">View Company Leave Policy</div>
+              <div class="ql-desc">Download complete policy document</div>
+            </div>
+          </button>
+          <button class="ql balance-btn" (click)="refreshBalance()">
+            <span class="icon">🔄</span>
+            <div class="ql-content">
+              <div class="ql-title">Refresh Balance</div>
+              <div class="ql-desc">Update leave balance data</div>
+            </div>
+          </button>
         </div>
       </div>
     </div>
