@@ -11,7 +11,7 @@ import { Employee, ChangePasswordRequest } from '../../models/employee.model';
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './my-profile.component.html',
-  styleUrls: ['./my-profile.component.css']
+  styleUrls: ['./my-profile.component.css'],
 })
 export class MyProfileComponent implements OnInit {
   employee = signal<Employee | null>(null);
@@ -21,7 +21,7 @@ export class MyProfileComponent implements OnInit {
   changePasswordForm: ChangePasswordRequest = {
     currentPassword: '',
     newPassword: '',
-    confirmPassword: ''
+    confirmPassword: '',
   };
   loading = signal(false);
   message = signal('');
@@ -49,12 +49,14 @@ export class MyProfileComponent implements OnInit {
   toggleEditMode() {
     if (this.isEditMode()) {
       // Cancel edit - revert changes
-      this.editableEmployee.set(this.employee() ? { ...this.employee()! } : null);
+      this.editableEmployee.set(
+        this.employee() ? { ...this.employee()! } : null
+      );
     } else {
       // Start edit mode
       this.clearMessage();
     }
-    this.isEditMode.update(mode => !mode);
+    this.isEditMode.update((mode) => !mode);
   }
 
   saveProfile() {
@@ -77,14 +79,20 @@ export class MyProfileComponent implements OnInit {
     // Simulate API call delay
     setTimeout(() => {
       try {
-        this.employeeService.updateEmployee(editedEmployee.EmployeeID, editedEmployee);
+        this.employeeService.updateEmployee(
+          editedEmployee.EmployeeID,
+          editedEmployee
+        );
         this.employee.set({ ...editedEmployee });
         this.isEditMode.set(false);
         this.loading.set(false);
         this.showMessage('Profile updated successfully!', 'success');
       } catch (error) {
         this.loading.set(false);
-        this.showMessage('Failed to update profile. Please try again.', 'error');
+        this.showMessage(
+          'Failed to update profile. Please try again.',
+          'error'
+        );
       }
     }, 1000);
   }
@@ -95,14 +103,14 @@ export class MyProfileComponent implements OnInit {
   }
 
   toggleChangePassword() {
-    this.showChangePassword.update(show => !show);
+    this.showChangePassword.update((show) => !show);
     this.resetPasswordForm();
     this.clearMessage();
   }
 
   onChangePassword() {
     const form = this.changePasswordForm;
-    
+
     // Validation
     if (!form.currentPassword || !form.newPassword || !form.confirmPassword) {
       this.showMessage('All fields are required.', 'error');
@@ -110,12 +118,18 @@ export class MyProfileComponent implements OnInit {
     }
 
     if (form.newPassword !== form.confirmPassword) {
-      this.showMessage('New password and confirm password do not match.', 'error');
+      this.showMessage(
+        'New password and confirm password do not match.',
+        'error'
+      );
       return;
     }
 
     if (form.newPassword.length < 6) {
-      this.showMessage('New password must be at least 6 characters long.', 'error');
+      this.showMessage(
+        'New password must be at least 6 characters long.',
+        'error'
+      );
       return;
     }
 
@@ -136,7 +150,7 @@ export class MyProfileComponent implements OnInit {
       );
 
       this.loading.set(false);
-      
+
       if (result.success) {
         this.showMessage(result.message, 'success');
         this.resetPasswordForm();
@@ -151,14 +165,14 @@ export class MyProfileComponent implements OnInit {
     this.changePasswordForm = {
       currentPassword: '',
       newPassword: '',
-      confirmPassword: ''
+      confirmPassword: '',
     };
   }
 
   private showMessage(msg: string, type: 'success' | 'error') {
     this.message.set(msg);
     this.messageType.set(type);
-    
+
     // Auto-hide success messages after 3 seconds
     if (type === 'success') {
       setTimeout(() => this.clearMessage(), 3000);
@@ -181,7 +195,7 @@ export class MyProfileComponent implements OnInit {
   getManagerName(): string {
     const employee = this.employee();
     if (!employee?.ManagerID) return '-';
-    
+
     const manager = this.employeeService.getEmployee(employee.ManagerID);
     return manager?.Name || '-';
   }

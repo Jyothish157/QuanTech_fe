@@ -2,7 +2,9 @@
   <header class="header">
     <div class="overview-text">
       <h1>Employee Management</h1>
-      <p class="muted">Manage employee accounts, roles, and access permissions.</p>
+      <p class="muted">
+        Manage employee accounts, roles, and access permissions.
+      </p>
     </div>
     <button class="btn primary" (click)="addNewEmployee()">
       <span>+</span> Add Employee
@@ -11,13 +13,13 @@
 
   <!-- Search Bar -->
   <div class="search-container">
-    <input 
-      type="text" 
-      placeholder="Search employees..." 
+    <input
+      type="text"
+      placeholder="Search employees..."
       [(ngModel)]="searchTerm"
       (input)="searchEmployees()"
       class="search-input"
-    >
+    />
   </div>
 
   <!-- Add/Edit Form -->
@@ -28,30 +30,30 @@
     <form (ngSubmit)="editingEmployee ? updateEmployee() : addEmployee()">
       <div class="form-group">
         <label>Employee ID</label>
-        <input 
-          type="text" 
-          [(ngModel)]="newEmployee.EmployeeID" 
+        <input
+          type="text"
+          [(ngModel)]="newEmployee.EmployeeID"
           name="employeeId"
           [readonly]="!!editingEmployee"
           class="form-input"
-        >
+        />
       </div>
-      
+
       <div class="form-group">
         <label>Full Name *</label>
-        <input 
-          type="text" 
-          [(ngModel)]="newEmployee.Name" 
+        <input
+          type="text"
+          [(ngModel)]="newEmployee.Name"
           name="name"
           required
           class="form-input"
-        >
+        />
       </div>
-      
+
       <div class="form-group">
         <label>Department *</label>
-        <select 
-          [(ngModel)]="newEmployee.Department" 
+        <select
+          [(ngModel)]="newEmployee.Department"
           name="department"
           required
           class="form-input"
@@ -66,21 +68,21 @@
           <option value="Operations">Operations</option>
         </select>
       </div>
-      
+
       <div class="form-group">
         <label>Email</label>
-        <input 
-          type="email" 
-          [(ngModel)]="newEmployee.Email" 
+        <input
+          type="email"
+          [(ngModel)]="newEmployee.Email"
           name="email"
           class="form-input"
-        >
+        />
       </div>
-      
+
       <div class="form-group">
         <label>Role *</label>
-        <select 
-          [(ngModel)]="newEmployee.Role" 
+        <select
+          [(ngModel)]="newEmployee.Role"
           name="role"
           required
           class="form-input"
@@ -92,26 +94,26 @@
 
       <div class="form-group">
         <label>Username</label>
-        <input 
-          type="text" 
-          [(ngModel)]="newEmployee.Username" 
+        <input
+          type="text"
+          [(ngModel)]="newEmployee.Username"
           name="username"
           class="form-input"
           placeholder="Auto-generated if empty"
-        >
+        />
       </div>
 
       <div class="form-group">
         <label>Password</label>
-        <input 
-          type="password" 
-          [(ngModel)]="newEmployee.Password" 
+        <input
+          type="password"
+          [(ngModel)]="newEmployee.Password"
           name="password"
           class="form-input"
           placeholder="Auto-generated if empty"
-        >
+        />
       </div>
-      
+
       <div class="form-actions">
         <button type="submit" class="btn primary">
           {{ editingEmployee ? 'Update Employee' : 'Add Employee' }}
@@ -155,7 +157,10 @@
               <button class="btn small" (click)="editEmployee(employee)">
                 Edit
               </button>
-              <button class="btn small danger" (click)="deleteEmployee(employee.EmployeeID)">
+              <button
+                class="btn small danger"
+                (click)="deleteEmployee(employee.EmployeeID)"
+              >
                 Delete
               </button>
             </td>

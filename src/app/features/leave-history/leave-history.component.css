@@ -1,72 +1,80 @@
 .wrapper {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 2rem 1rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
 }
 
 .topbar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
 }
 
 h2 {
-    color: #2D1B69;
-    margin: 0;
+  color: #2d1b69;
+  margin: 0;
 }
 
 .icon-btn {
-    border: 1px solid #E6E2FF;
-    background: #FFFFFF;
-    color: #2D1B69;
-    border-radius: 10px;
-    padding: 0.5rem 0.75rem;
-    cursor: pointer;
-    transition: all 0.2s ease;
+  border: 1px solid #e6e2ff;
+  background: #ffffff;
+  color: #2d1b69;
+  border-radius: 10px;
+  padding: 0.5rem 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
 .icon-btn:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 6px 16px rgba(45, 27, 105, 0.08);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(45, 27, 105, 0.08);
 }
 
 .table-card {
-    background: #FFFFFF;
-    border: 1px solid #F1EDFF;
-    border-radius: 12px;
-    padding: 0.5rem;
-    box-shadow: 0 4px 15px rgba(45, 27, 105, 0.05);
+  background: #ffffff;
+  border: 1px solid #f1edff;
+  border-radius: 12px;
+  padding: 0.5rem;
+  box-shadow: 0 4px 15px rgba(45, 27, 105, 0.05);
 }
 
 table {
-    width: 100%;
-    border-collapse: collapse;
+  width: 100%;
+  border-collapse: collapse;
 }
 
-th, td {
-    text-align: left;
-    padding: 0.75rem;
+th,
+td {
+  text-align: left;
+  padding: 0.75rem;
 }
 
 thead th {
-    color: #6B63A7;
-    font-weight: 600;
-    border-bottom: 1px solid #EFEAFD;
+  color: #6b63a7;
+  font-weight: 600;
+  border-bottom: 1px solid #efeafd;
 }
 
 tbody tr + tr td {
-    border-top: 1px solid #F7F5FF;
+  border-top: 1px solid #f7f5ff;
 }
 
 .badge {
-    padding: 0.25rem 0.5rem;
-    border-radius: 999px;
-    font-size: 0.85rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
 }
 
-.badge.ok { background: #E8FBF1; color: #1C7F4E; }
-.badge.warn { background: #FFF9E6; color: #946200; }
-.badge.err { background: #FFE9E8; color: #9A1C1C; }
-
-
+.badge.ok {
+  background: #e8fbf1;
+  color: #1c7f4e;
+}
+.badge.warn {
+  background: #fff9e6;
+  color: #946200;
+}
+.badge.err {
+  background: #ffe9e8;
+  color: #9a1c1c;
+}

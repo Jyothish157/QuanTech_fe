@@ -1,5 +1,10 @@
 <!-- Hamburger button for mobile -->
-<button class="hamburger" (click)="toggleSidebar()" aria-label="Open navigation" *ngIf="!sidebarOpen">
+<button
+  class="hamburger"
+  (click)="toggleSidebar()"
+  aria-label="Open navigation"
+  *ngIf="!sidebarOpen"
+>
   <span></span>
   <span></span>
   <span></span>
@@ -11,16 +16,29 @@
 <nav class="sidebar" [class.open]="sidebarOpen">
   <div class="sidebar-header">
     <div class="logo">
-      <div class="logo-icon"><img src="./file.jpg" alt="logo"
-        style="width: 50px;height: 50px;border-radius:50%;background:linear-gradient(135deg,#c471f5,#fa71cd);box-shadow:0 2px 12px rgba(0,0,0,0.15);"></div>
+      <div class="logo-icon">
+        <img
+          src="./file.jpg"
+          alt="logo"
+          style="
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #c471f5, #fa71cd);
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+          "
+        />
+      </div>
       <div class="logo-text">QuanTech</div>
     </div>
     <p class="role-badge" [class.manager]="isManager">
       {{ currentEmployee?.Name || (isManager ? 'Manager' : 'Employee') }}
     </p>
-    <button class="profile-btn" (click)="goToMyProfile()" title="My Profile">👤 My Profile</button>
+    <button class="profile-btn" (click)="goToMyProfile()" title="My Profile">
+      👤 My Profile
+    </button>
   </div>
-  
+
   <ul class="nav-menu">
     <li>
       <a routerLink="/dashboard" routerLinkActive="active" class="nav-link">
@@ -28,66 +46,80 @@
         Dashboard
       </a>
     </li>
-    
+
     <li>
       <a routerLink="/attendance" routerLinkActive="active" class="nav-link">
         <span class="icon">⌚</span>
         Attendance
       </a>
     </li>
-    
+
     <li>
-      <a routerLink="/leave-requests" routerLinkActive="active" class="nav-link">
+      <a
+        routerLink="/leave-requests"
+        routerLinkActive="active"
+        class="nav-link"
+      >
         <span class="icon">📅</span>
         Leave Requests
       </a>
     </li>
-    
+
     <li>
       <a routerLink="/leave-balance" routerLinkActive="active" class="nav-link">
         <span class="icon">💼</span>
         Leave Balance
       </a>
     </li>
-    
+
     <li>
       <a routerLink="/shifts" routerLinkActive="active" class="nav-link">
         <span class="icon">👥</span>
         Shifts
       </a>
     </li>
-    
-    <li>
+
+    <!-- Manager only menu items -->
+    <li *ngIf="isManager" class="manager-section">
+      <div class="section-divider">Management</div>
+    </li>
+
+    <li *ngIf="isManager">
       <a routerLink="/reports" routerLinkActive="active" class="nav-link">
         <span class="icon">📈</span>
         Reports
       </a>
     </li>
-    
-    <!-- Manager only menu items -->
-    <li *ngIf="isManager" class="manager-section">
-      <div class="section-divider">Management</div>
-    </li>
-    
+
     <li *ngIf="isManager">
-      <a routerLink="/employee-management" routerLinkActive="active" class="nav-link">
+      <a
+        routerLink="/employee-management"
+        routerLinkActive="active"
+        class="nav-link"
+      >
         <span class="icon">👤</span>
         Employee Management
       </a>
     </li>
-    
+
     <li *ngIf="isManager">
-      <a routerLink="/employee-attendance" routerLinkActive="active" class="nav-link">
+      <a
+        routerLink="/employee-attendance"
+        routerLinkActive="active"
+        class="nav-link"
+      >
         <span class="icon">📋</span>
         Employee Attendance
       </a>
     </li>
   </ul>
-  
+
   <div class="sidebar-footer">
     <button class="logout-btn" (click)="logout()">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M16 17v-3H9v-4h7V7l5 5-5 5zM14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z"/>
+        <path
+          d="M16 17v-3H9v-4h7V7l5 5-5 5zM14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z"
+        />
       </svg>
       Logout
     </button>

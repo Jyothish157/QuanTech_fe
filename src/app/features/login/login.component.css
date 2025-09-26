@@ -1,108 +1,108 @@
 .login-wrap {
-    display: grid;
-    place-items: center;
-    min-height: 100dvh;
-    padding: 1rem;
-    background: url('background.jpg') no-repeat center center fixed;
-    background-size: cover
+  display: grid;
+  place-items: center;
+  min-height: 100dvh;
+  padding: 1rem;
+  background: url('background.jpg') no-repeat center center fixed;
+  background-size: cover;
 }
 
 .card {
-    width: 100%;
-    max-width: 400px;
-    display: flex;
-    flex-direction: column;
-    gap: 1.25rem;
-    background: rgba(30, 30, 60, 0.85);
-    border-radius: 20px;
-    padding: 2rem 2rem 2.5rem 2rem;
-    box-shadow: 0 8px 30px rgba(2, 6, 23, .25);
-    align-items: center
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  background: rgba(30, 30, 60, 0.85);
+  border-radius: 20px;
+  padding: 2rem 2rem 2.5rem 2rem;
+  box-shadow: 0 8px 30px rgba(2, 6, 23, 0.25);
+  align-items: center;
 }
 
 h2 {
-    margin: 0 0 1rem;
-    color: #fff;
-    font-size: 1.6rem;
-    font-weight: bold;
-    letter-spacing: 1px
+  margin: 0 0 1rem;
+  color: #fff;
+  font-size: 1.6rem;
+  font-weight: bold;
+  letter-spacing: 1px;
 }
 
 label {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: .25rem;
-    color: #fff;
-    font-size: 1rem;
-    font-weight: 500
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 500;
 }
 
 input,
 select {
-    height: 44px;
-    border: none;
-    border-radius: 10px;
-    padding: 0 .75rem;
-    background: rgba(255, 255, 255, 0.15);
-    color: #fff;
-    font-weight: 500;
-    font-size: 1rem;
-    margin-top: .25rem
+  height: 44px;
+  border: none;
+  border-radius: 10px;
+  padding: 0 0.75rem;
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+  font-weight: 500;
+  font-size: 1rem;
+  margin-top: 0.25rem;
 }
 
 input::placeholder {
-    color: #e0e0e0
+  color: #e0e0e0;
 }
 
 select {
-    color: #fff
+  color: #fff;
 }
 
 .btn {
-    height: 40px;
-    border: 0;
-    border-radius: 8px;
-    padding: 0 1rem;
-    cursor: pointer
+  height: 40px;
+  border: 0;
+  border-radius: 8px;
+  padding: 0 1rem;
+  cursor: pointer;
 }
 
 .btn.primary {
-    width: 100%;
-    height: 44px;
-    border: none;
-    border-radius: 10px;
-    background: linear-gradient(90deg, #c471f5 0%, #fa71cd 100%);
-    color: #fff;
-    font-size: 1.1rem;
-    font-weight: bold;
-    letter-spacing: 1px;
-    cursor: pointer;
-    margin-top: 1rem;
-    transition: background 0.2s
+  width: 100%;
+  height: 44px;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(90deg, #c471f5 0%, #fa71cd 100%);
+  color: #fff;
+  font-size: 1.1rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+  cursor: pointer;
+  margin-top: 1rem;
+  transition: background 0.2s;
 }
 
 .btn.primary:hover {
-    background: linear-gradient(90deg, #fa71cd 0%, #c471f5 100%)
+  background: linear-gradient(90deg, #fa71cd 0%, #c471f5 100%);
 }
 
 .error {
-    color: #ff6b6b;
-    font-size: 1rem;
-    margin-top: .5rem;
-    text-align: center
+  color: #ff6b6b;
+  font-size: 1rem;
+  margin-top: 0.5rem;
+  text-align: center;
 }
 
 .password-container {
-    position: relative;
-    display: flex;
-    align-items: center;
+  position: relative;
+  display: flex;
+  align-items: center;
 }
 
 .password-input {
-    width: 100%;
-    padding-right: 40px !important;
-    appearance: none;
+  width: 100%;
+  padding-right: 40px !important;
+  appearance: none;
 }
 
 .password-input::-ms-reveal,
@@ -111,19 +111,19 @@ select {
 }
 
 .password-toggle {
-    position: absolute;
-    right: 8px;
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 4px;
-    color: #e0e0e0;
-    transition: color 0.2s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  position: absolute;
+  right: 8px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  color: #e0e0e0;
+  transition: color 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .password-toggle:hover {
-    color: #fff;
+  color: #fff;
 }

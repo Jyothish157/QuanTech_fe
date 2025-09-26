@@ -8,14 +8,17 @@ import { NavigationComponent } from './features/navigation/navigation.component'
   selector: 'app-root',
   imports: [CommonModule, RouterOutlet, NavigationComponent],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  styleUrl: './app.component.css',
 })
 export class AppComponent {
   title = 'front';
 
-  constructor(private auth: AuthService, private router: Router) {}
+  constructor(
+    private auth: AuthService,
+    private router: Router
+  ) {}
 
-  isAuthenticated() { 
-    return this.auth.isAuthenticated(); 
+  isAuthenticated() {
+    return this.auth.isAuthenticated();
   }
 }

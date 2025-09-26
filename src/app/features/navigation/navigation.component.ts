@@ -9,7 +9,7 @@ import { EmployeeService } from '../../services/employee.service';
   standalone: true,
   imports: [CommonModule, RouterLink, RouterLinkActive],
   templateUrl: './navigation.component.html',
-  styleUrls: ['./navigation.component.css']
+  styleUrls: ['./navigation.component.css'],
 })
 export class NavigationComponent {
   isManager = false;
@@ -17,7 +17,11 @@ export class NavigationComponent {
   myEmployeeId = '';
   currentEmployee: any;
 
-  constructor(private auth: AuthService, private router: Router, private employees: EmployeeService) {
+  constructor(
+    private auth: AuthService,
+    private router: Router,
+    private employees: EmployeeService
+  ) {
     this.isManager = this.auth.currentUser()?.role === 'manager';
     this.myEmployeeId = this.auth.getCurrentEmployeeId() || 'E1001';
     // Get the current user based on the authenticated employee ID

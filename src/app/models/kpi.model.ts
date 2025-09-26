@@ -4,5 +4,3 @@ export interface KPI {
   icon: string;
   color: string;
 }
-
-

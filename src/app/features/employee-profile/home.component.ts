@@ -9,12 +9,17 @@ import { Employee } from '../../models/employee.model';
   standalone: true,
   imports: [CommonModule, RouterModule],
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']
+  styleUrls: ['./home.component.css'],
 })
 export class EmployeeHomeComponent {
-  constructor(private employees: EmployeeService, private router: Router) {}
+  constructor(
+    private employees: EmployeeService,
+    private router: Router
+  ) {}
 
-  get list(): Employee[] { return this.employees.getEmployees(); }
+  get list(): Employee[] {
+    return this.employees.getEmployees();
+  }
 
   viewProfile(id: string): void {
     this.router.navigate(['/employee-profile/profile', id]);
@@ -24,5 +29,3 @@ export class EmployeeHomeComponent {
     this.router.navigate(['/employee-profile/edit', id]);
   }
 }
-
-

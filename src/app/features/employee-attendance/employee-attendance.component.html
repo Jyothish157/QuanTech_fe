@@ -1,28 +1,41 @@
 <section class="page">
-  <h2 align="center">Employee Management</h2>
+  <h2>Employee Directory</h2>
 
-  <form class="form" (ngSubmit)="add()">
-    <label>Employee ID<input [(ngModel)]="form.id" name="id" required /></label>
-    <label>Name<input [(ngModel)]="form.name" name="name" required /></label>
-    <label>Department<input [(ngModel)]="form.department" name="department" placeholder="General" /></label>
-    <button class="btn primary">Add Employee</button>
-  </form>
-
-  <div class="card">
-    <div class="card-title">Search</div>
-    <input class="search" [(ngModel)]="term" placeholder="Search by id, name, department" />
+  <div class="search-card">
+    <div class="search-header">
+      <h3>Search Employees</h3>
+      <div class="employee-count">{{ employees.length }} employees found</div>
+    </div>
+    <input
+      class="search-input"
+      [(ngModel)]="term"
+      placeholder="Search by employee ID, name, or department..."
+    />
   </div>
 
-  <table class="table">
-    <thead><tr><th>ID</th><th>Name</th><th>Department</th></tr></thead>
-    <tbody>
-      <tr *ngFor="let e of employees">
-        <td>{{ e.EmployeeID }}</td>
-        <td>{{ e.Name }}</td>
-        <td>{{ e.Department }}</td>
-      </tr>
-    </tbody>
-  </table>
+  <div class="table-container">
+    <table class="employee-table">
+      <thead>
+        <tr>
+          <th>Employee ID</th>
+          <th>Employee Name</th>
+          <th>Department</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let e of employees" class="employee-row">
+          <td class="employee-id">{{ e.EmployeeID }}</td>
+          <td class="employee-name">{{ e.Name }}</td>
+          <td class="department">{{ e.Department }}</td>
+          <td class="status">
+            <span class="status-badge active">Active</span>
+          </td>
+        </tr>
+        <tr *ngIf="employees.length === 0" class="no-results">
+          <td colspan="4">No employees found matching your search criteria</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </section>
-
-

@@ -1,12 +1,16 @@
 <section class="page">
   <h2>Shift Management</h2>
-  
+
   <div class="message" *ngIf="message">
     {{ message }}
   </div>
 
   <div class="employee-info" *ngIf="currentEmployee">
-    <p><strong>Employee:</strong> {{ currentEmployee.Name }} ({{ currentEmployee.EmployeeID }})</p>
+    <p>
+      <strong>Employee:</strong> {{ currentEmployee.Name }} ({{
+        currentEmployee.EmployeeID
+      }})
+    </p>
     <p><strong>Role:</strong> {{ currentEmployee.Role }}</p>
   </div>
 
@@ -16,7 +20,12 @@
       <form class="form" (ngSubmit)="createShift()">
         <label>
           Employee ID
-          <input type="text" [(ngModel)]="newShift.employeeId" name="employeeId" required />
+          <input
+            type="text"
+            [(ngModel)]="newShift.employeeId"
+            name="employeeId"
+            required
+          />
         </label>
         <label>
           Date
@@ -57,8 +66,15 @@
               <span class="badge pending">{{ req.Status }}</span>
             </td>
             <td>
-              <button class="btn small success" (click)="approveSwap(req.SwapID)">Approve</button>
-              <button class="btn small danger" (click)="rejectSwap(req.SwapID)">Reject</button>
+              <button
+                class="btn small success"
+                (click)="approveSwap(req.SwapID)"
+              >
+                Approve
+              </button>
+              <button class="btn small danger" (click)="rejectSwap(req.SwapID)">
+                Reject
+              </button>
             </td>
           </tr>
         </tbody>
@@ -141,5 +157,3 @@
     </table>
   </div>
 </section>
-
-

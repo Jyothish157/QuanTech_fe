@@ -29,7 +29,7 @@
   width: 80px;
   height: 80px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #5C3AFF, #8C6EFF);
+  background: linear-gradient(135deg, #5c3aff, #8c6eff);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -41,7 +41,7 @@
 
 .user-details h1 {
   margin: 0 0 0.5rem 0;
-  color: #2D1B69;
+  color: #2d1b69;
   font-size: 2rem;
   font-weight: 600;
 }
@@ -63,7 +63,7 @@
 }
 
 .employee-id {
-  color: #8A88A8;
+  color: #8a88a8;
   margin: 0;
   font-size: 0.9rem;
 }
@@ -94,7 +94,7 @@
 }
 
 .btn.primary {
-  background: linear-gradient(135deg, #5C3AFF, #8C6EFF);
+  background: linear-gradient(135deg, #5c3aff, #8c6eff);
   color: white;
 }
 
@@ -105,13 +105,13 @@
 
 .btn.secondary {
   background: #f8f9ff;
-  color: #5C3AFF;
+  color: #5c3aff;
   border: 1px solid #e1e5f0;
 }
 
 .btn.secondary:hover {
   background: #f0f3ff;
-  border-color: #5C3AFF;
+  border-color: #5c3aff;
 }
 
 .btn:disabled {
@@ -154,7 +154,7 @@
 }
 
 .info-section h2 {
-  color: #2D1B69;
+  color: #2d1b69;
   margin: 0 0 1.5rem 0;
   font-size: 1.5rem;
   font-weight: 600;
@@ -180,14 +180,14 @@
 
 .info-item label {
   font-weight: 500;
-  color: #8A88A8;
+  color: #8a88a8;
   font-size: 0.9rem;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 
 .info-item span {
-  color: #2D1B69;
+  color: #2d1b69;
   font-weight: 500;
   padding: 0.75rem 1rem;
   background: #f8f9ff;
@@ -239,7 +239,7 @@
 .form-group label {
   display: block;
   font-weight: 500;
-  color: #2D1B69;
+  color: #2d1b69;
   margin-bottom: 0.5rem;
   font-size: 0.9rem;
 }
@@ -251,7 +251,9 @@
   border: 1px solid #e1e5f0;
   border-radius: 8px;
   font-size: 1rem;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
   background: #fff;
   font-family: inherit;
 }
@@ -259,13 +261,13 @@
 .form-group input:focus,
 .form-group textarea:focus {
   outline: none;
-  border-color: #5C3AFF;
+  border-color: #5c3aff;
   box-shadow: 0 0 0 3px rgba(92, 58, 255, 0.1);
 }
 
 .form-group .disabled-field {
   background: #f8f9ff;
-  color: #8A88A8;
+  color: #8a88a8;
   cursor: not-allowed;
 }
 
@@ -293,12 +295,13 @@
   align-items: center;
   justify-content: center;
   min-height: 50vh;
-  color: #8A88A8;
+  color: #8a88a8;
 }
 
-.spinner, .spinner-large {
+.spinner,
+.spinner-large {
   border: 2px solid #f3f3f3;
-  border-top: 2px solid #5C3AFF;
+  border-top: 2px solid #5c3aff;
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
@@ -315,8 +318,12 @@
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 /* Responsive Design */
@@ -324,17 +331,17 @@
   .my-profile-container {
     padding: 1.5rem;
   }
-  
+
   .profile-header {
     padding: 1.5rem;
   }
-  
+
   .avatar {
     width: 70px;
     height: 70px;
     font-size: 1.75rem;
   }
-  
+
   .user-details h1 {
     font-size: 1.75rem;
   }
@@ -344,36 +351,36 @@
   .my-profile-container {
     padding: 1rem;
   }
-  
+
   .info-grid,
   .form-grid {
     grid-template-columns: 1fr;
     gap: 1rem;
   }
-  
+
   .info-item.full-width,
   .form-group.full-width {
     grid-column: 1;
   }
-  
+
   .profile-header {
     flex-direction: column;
     gap: 1.5rem;
     text-align: center;
   }
-  
+
   .user-info {
     flex-direction: column;
     text-align: center;
     width: 100%;
   }
-  
+
   .action-buttons {
     width: 100%;
     justify-content: center;
     flex-wrap: wrap;
   }
-  
+
   .edit-buttons {
     width: 100%;
     justify-content: center;
@@ -385,74 +392,74 @@
     padding: 0.75rem;
     min-height: auto;
   }
-  
+
   .profile-header {
     padding: 1.25rem;
     margin-bottom: 1.5rem;
     flex-direction: column;
     gap: 1.5rem;
   }
-  
+
   .avatar {
     width: 60px;
     height: 60px;
     font-size: 1.5rem;
   }
-  
+
   .user-details h1 {
     font-size: 1.5rem;
   }
-  
+
   .info-section {
     padding: 1.5rem;
     margin-bottom: 1.5rem;
   }
-  
+
   .info-section h2 {
     font-size: 1.25rem;
     margin-bottom: 1.25rem;
   }
-  
+
   .btn {
     padding: 0.625rem 1.25rem;
     font-size: 0.875rem;
     min-width: 120px;
   }
-  
+
   .action-buttons {
     width: 100%;
     justify-content: center;
     gap: 0.75rem;
   }
-  
+
   .info-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .user-info {
     flex-direction: column;
     text-align: center;
   }
-  
+
   .form-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .edit-buttons {
     flex-direction: column;
     width: 100%;
     gap: 0.75rem;
   }
-  
+
   .form-actions {
     flex-direction: column;
     gap: 0.75rem;
   }
-  
+
   .btn {
     justify-content: center;
   }
-  
+
   .password-form {
     max-width: 100%;
   }
@@ -462,67 +469,67 @@
   .my-profile-container {
     padding: 0.5rem;
   }
-  
+
   .profile-header {
     padding: 1rem;
     border-radius: 12px;
   }
-  
+
   .info-section {
     padding: 1rem;
     border-radius: 12px;
   }
-  
+
   .avatar {
     width: 50px;
     height: 50px;
     font-size: 1.25rem;
   }
-  
+
   .user-details h1 {
     font-size: 1.25rem;
     margin-bottom: 0.25rem;
   }
-  
+
   .role-badge {
     font-size: 0.75rem;
     padding: 0.2rem 0.6rem;
   }
-  
+
   .employee-id {
     font-size: 0.8rem;
   }
-  
+
   .info-section h2 {
     font-size: 1.125rem;
   }
-  
+
   .info-item label,
   .form-group label {
     font-size: 0.8rem;
   }
-  
+
   .info-item span {
     padding: 0.6rem 0.8rem;
     font-size: 0.9rem;
   }
-  
+
   .form-group input,
   .form-group textarea {
     padding: 0.6rem 0.8rem;
     font-size: 0.9rem;
   }
-  
+
   .btn {
     padding: 0.5rem 1rem;
     font-size: 0.8rem;
     min-width: 100px;
   }
-  
+
   .icon {
     font-size: 0.875rem;
   }
-  
+
   .message {
     padding: 0.75rem 1rem;
     font-size: 0.875rem;
@@ -533,22 +540,22 @@
   .user-info {
     gap: 1rem;
   }
-  
+
   .info-grid {
     gap: 0.75rem;
   }
-  
+
   .form-grid {
     gap: 1rem;
   }
-  
+
   .action-buttons,
   .edit-buttons,
   .form-actions {
     flex-direction: column;
     width: 100%;
   }
-  
+
   .btn {
     width: 100%;
     justify-content: center;
@@ -560,31 +567,31 @@
   .my-profile-container {
     padding: 0.5rem;
   }
-  
+
   .profile-header {
     flex-direction: row;
     text-align: left;
   }
-  
+
   .user-info {
     flex-direction: row;
     text-align: left;
   }
-  
+
   .avatar {
     width: 45px;
     height: 45px;
     font-size: 1.125rem;
   }
-  
+
   .user-details h1 {
     font-size: 1.125rem;
   }
-  
+
   .info-section {
     padding: 1rem;
   }
-  
+
   .info-grid {
     grid-template-columns: repeat(2, 1fr);
   }

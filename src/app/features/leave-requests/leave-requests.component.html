@@ -2,8 +2,13 @@
   <!-- Submit New Leave Request Section -->
   <div class="form-section">
     <h2 class="main-heading">Submit New Leave Request</h2>
-    
-    <div class="message" *ngIf="message" [class.success]="message.includes('successfully')" [class.error]="message.includes('Insufficient')">
+
+    <div
+      class="message"
+      *ngIf="message"
+      [class.success]="message.includes('successfully')"
+      [class.error]="message.includes('Insufficient')"
+    >
       {{ message }}
     </div>
 
@@ -25,7 +30,12 @@
         </label>
         <label>
           Reason (Optional)
-          <input type="text" [(ngModel)]="form.reason" name="reason" placeholder="Enter reason for leave" />
+          <input
+            type="text"
+            [(ngModel)]="form.reason"
+            name="reason"
+            placeholder="Enter reason for leave"
+          />
         </label>
       </div>
       <button class="btn submit-btn" type="submit">Submit Leave Request</button>
@@ -55,10 +65,12 @@
               <td>{{ r.EndDate }}</td>
               <td>{{ calcDays(r.StartDate, r.EndDate) }}</td>
               <td>
-                <span class="badge" 
-                      [class.approved]="r.Status==='Approved'" 
-                      [class.pending]="r.Status==='Pending'" 
-                      [class.rejected]="r.Status==='Rejected'">
+                <span
+                  class="badge"
+                  [class.approved]="r.Status === 'Approved'"
+                  [class.pending]="r.Status === 'Pending'"
+                  [class.rejected]="r.Status === 'Rejected'"
+                >
                   {{ r.Status }}
                 </span>
               </td>
@@ -93,8 +105,18 @@
               <td>{{ calcDays(r.StartDate, r.EndDate) }}</td>
               <td>{{ r.Reason || '-' }}</td>
               <td class="actions-cell">
-                <button class="btn approve-btn" (click)="approveRequest(r.LeaveID)">Approve</button>
-                <button class="btn reject-btn" (click)="rejectRequest(r.LeaveID)">Reject</button>
+                <button
+                  class="btn approve-btn"
+                  (click)="approveRequest(r.LeaveID)"
+                >
+                  Approve
+                </button>
+                <button
+                  class="btn reject-btn"
+                  (click)="rejectRequest(r.LeaveID)"
+                >
+                  Reject
+                </button>
               </td>
             </tr>
           </tbody>
@@ -103,5 +125,3 @@
     </div>
   </div>
 </section>
-
-

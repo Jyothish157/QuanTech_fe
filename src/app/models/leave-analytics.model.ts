@@ -3,5 +3,3 @@ export interface LeaveAnalytics {
   count: number;
   percentage: number;
 }
-
-

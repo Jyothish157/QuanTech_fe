@@ -16,5 +16,3 @@ export interface ShiftSwapRequest {
   Status: 'Pending' | 'Approved' | 'Rejected';
   RequestedBy: string;
 }
-
-

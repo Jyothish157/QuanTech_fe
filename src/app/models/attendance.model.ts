@@ -4,5 +4,3 @@ export interface Attendance {
   ClockOutTime?: string;
   WorkHours?: number;
 }
-
-

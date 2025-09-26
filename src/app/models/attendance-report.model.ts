@@ -5,5 +5,3 @@ export interface AttendanceReport {
   TotalAttendance: number;
   Absenteeism: number;
 }
-
-

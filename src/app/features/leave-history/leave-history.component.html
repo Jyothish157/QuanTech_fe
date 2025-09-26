@@ -1,7 +1,12 @@
 <section class="wrapper">
   <header class="topbar">
     <h2>Leave History</h2>
-    <button class="icon-btn" (click)="downloadCsv()" title="Download CSV" aria-label="Download CSV">
+    <button
+      class="icon-btn"
+      (click)="downloadCsv()"
+      title="Download CSV"
+      aria-label="Download CSV"
+    >
       ⬇️
     </button>
   </header>
@@ -22,12 +27,16 @@
           <td>{{ r.type }}</td>
           <td>{{ r.days }}</td>
           <td>
-            <span class="badge" [class.ok]="r.status==='Approved'" [class.warn]="r.status==='Pending'" [class.err]="r.status==='Rejected'">{{ r.status }}</span>
+            <span
+              class="badge"
+              [class.ok]="r.status === 'Approved'"
+              [class.warn]="r.status === 'Pending'"
+              [class.err]="r.status === 'Rejected'"
+              >{{ r.status }}</span
+            >
           </td>
         </tr>
       </tbody>
     </table>
   </div>
 </section>
-
-

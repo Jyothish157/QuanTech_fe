@@ -2,7 +2,10 @@
   <header class="header">
     <div class="overview-text">
       <h1>Dashboard Overview</h1>
-      <p class="muted">Welcome back{{ currentEmployee ? ', ' + currentEmployee.Name : '' }}! Here's what's happening today.</p>
+      <p class="muted">
+        Welcome back{{ currentEmployee ? ', ' + currentEmployee.Name : '' }}!
+        Here's what's happening today.
+      </p>
     </div>
   </header>
 
@@ -11,7 +14,9 @@
       <div class="icon blue">⌚</div>
       <div class="meta">
         <div class="title">Today's Attendance</div>
-        <div class="desc">{{ getTodayAttendanceCount() }} of {{ getTotalEmployees() }} employees</div>
+        <div class="desc">
+          {{ getTodayAttendanceCount() }} of {{ getTotalEmployees() }} employees
+        </div>
       </div>
       <div class="value">{{ todayAttendancePercentage }}%</div>
     </a>
@@ -51,15 +56,17 @@
           {{ isClockedIn ? 'Clock Out' : 'Clock In' }}
         </a>
         <a routerLink="/leave-requests" class="qa">New Leave</a>
-        <a routerLink="/reports" class="qa">View Reports</a>
         <a routerLink="/leave-balance" class="qa">Leave Balance</a>
         <a routerLink="/shifts" class="qa">Shifts</a>
         <!-- Manager only actions -->
-        <a routerLink="/employee-management" class="qa" *ngIf="isManager">Manage Employees</a>
-        <a routerLink="/employee-attendance" class="qa" *ngIf="isManager">Employee Attendance</a>
+        <a routerLink="/reports" class="qa" *ngIf="isManager">View Reports</a>
+        <a routerLink="/employee-management" class="qa" *ngIf="isManager"
+          >Manage Employees</a
+        >
+        <a routerLink="/employee-attendance" class="qa" *ngIf="isManager"
+          >Employee Attendance</a
+        >
       </div>
     </div>
   </div>
 </section>
-
-

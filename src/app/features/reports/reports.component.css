@@ -1,38 +1,185 @@
-.page{display:flex;flex-direction:column;gap:1rem;padding:1rem}
-h2{text-align:center;color:#2D1B69;margin:0 0 .5rem}
-.kpi-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem}
-.kpi{display:flex;align-items:center;gap:.75rem;background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:1rem;box-shadow:0 4px 15px rgba(45,27,105,.05)}
-.kpi .icon{width:40px;height:40px;border-radius:10px;display:grid;place-items:center;background:var(--c,#5C3AFF);color:#fff}
-.kpi .title{color:#6b7280;font-size:.9rem}
-.kpi .value{color:#2D1B69;font-weight:800;font-size:1.25rem}
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem;
+}
+h2 {
+  text-align: center;
+  color: #2d1b69;
+  margin: 0 0 0.5rem;
+}
+.kpi-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+}
+.kpi {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 1rem;
+  box-shadow: 0 4px 15px rgba(45, 27, 105, 0.05);
+}
+.kpi .icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  background: var(--c, #5c3aff);
+  color: #fff;
+}
+.kpi .title {
+  color: #6b7280;
+  font-size: 0.9rem;
+}
+.kpi .value {
+  color: #2d1b69;
+  font-weight: 800;
+  font-size: 1.25rem;
+}
 
-.charts-row{display:grid;grid-template-columns:1fr;gap:1rem;align-items:stretch}
-.card{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:1rem;min-height:400px;display:flex;flex-direction:column}
-.card:nth-child(2){min-height:220px}
-.card:nth-child(3) .tru-time{flex:0 0 auto}
-.card-title{font-weight:700;color:#2D1B69;margin-bottom:.5rem;flex-shrink:0}
-.chart{display:flex;gap:.5rem;align-items:flex-end;height:160px}
-.bar{flex:1;background:linear-gradient(180deg,#22c55e,#059669);border-radius:6px}
-.chart-labels{display:flex;justify-content:space-between;color:#6b7280;font-size:.8rem;margin-top:.35rem}
+.charts-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  align-items: stretch;
+}
+.card {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 1rem;
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+}
+.card:nth-child(2) {
+  min-height: 220px;
+}
+.card:nth-child(3) .tru-time {
+  flex: 0 0 auto;
+}
+.card-title {
+  font-weight: 700;
+  color: #2d1b69;
+  margin-bottom: 0.5rem;
+  flex-shrink: 0;
+}
+.chart {
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-end;
+  height: 160px;
+}
+.bar {
+  flex: 1;
+  background: linear-gradient(180deg, #22c55e, #059669);
+  border-radius: 6px;
+}
+.chart-labels {
+  display: flex;
+  justify-content: space-between;
+  color: #6b7280;
+  font-size: 0.8rem;
+  margin-top: 0.35rem;
+}
 
-.donut{display:flex;gap:1rem;align-items:center}
-.ring{width:140px;height:140px;border-radius:999px;background:conic-gradient(#3b82f6 0 65%, #ef4444 65% 85%, #a78bfa 85% 100%);position:relative}
-.ring:after{content:"";position:absolute;inset:20px;border-radius:999px;background:#fff}
-.legend{display:flex;flex-direction:column;gap:.35rem;color:#374151}
-.dot{display:inline-block;width:10px;height:10px;border-radius:999px;margin-right:.35rem}
-.dot.v{background:#3b82f6}.dot.s{background:#ef4444}.dot.c{background:#a78bfa}
+.donut {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+.ring {
+  width: 140px;
+  height: 140px;
+  border-radius: 999px;
+  background: conic-gradient(#3b82f6 0 65%, #ef4444 65% 85%, #a78bfa 85% 100%);
+  position: relative;
+}
+.ring:after {
+  content: '';
+  position: absolute;
+  inset: 20px;
+  border-radius: 999px;
+  background: #fff;
+}
+.legend {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  color: #374151;
+}
+.dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  margin-right: 0.35rem;
+}
+.dot.v {
+  background: #3b82f6;
+}
+.dot.s {
+  background: #ef4444;
+}
+.dot.c {
+  background: #a78bfa;
+}
 
-.shift-coverage{display:grid;gap:.5rem;flex:1;align-content:start}
-.coverage-item{display:grid;grid-template-columns:90px 1fr auto;align-items:center;gap:.5rem}
-.coverage-bar{background:#f3f4f6;border-radius:999px;overflow:hidden;height:10px}
-.coverage-fill{background:linear-gradient(135deg,#5C3AFF,#8C6EFF);height:100%}
+.shift-coverage {
+  display: grid;
+  gap: 0.5rem;
+  flex: 1;
+  align-content: start;
+}
+.coverage-item {
+  display: grid;
+  grid-template-columns: 90px 1fr auto;
+  align-items: center;
+  gap: 0.5rem;
+}
+.coverage-bar {
+  background: #f3f4f6;
+  border-radius: 999px;
+  overflow: hidden;
+  height: 10px;
+}
+.coverage-fill {
+  background: linear-gradient(135deg, #5c3aff, #8c6eff);
+  height: 100%;
+}
 
-.tru-time{display:grid;gap:.35rem;align-content:start;padding-bottom:0}
-.tru-time .row{display:grid;grid-template-columns:160px 1fr auto;gap:.5rem;align-items:center}
-.bar-wrap{background:#f3f4f6;border-radius:10px;overflow:hidden;height:10px}
-.bar-fill{background:#34d399;height:100%}
+.tru-time {
+  display: grid;
+  gap: 0.35rem;
+  align-content: start;
+  padding-bottom: 0;
+}
+.tru-time .row {
+  display: grid;
+  grid-template-columns: 160px 1fr auto;
+  gap: 0.5rem;
+  align-items: center;
+}
+.bar-wrap {
+  background: #f3f4f6;
+  border-radius: 10px;
+  overflow: hidden;
+  height: 10px;
+}
+.bar-fill {
+  background: #34d399;
+  height: 100%;
+}
 
-.table-card{padding:0}
+.table-card {
+  padding: 0;
+}
 .card-header {
   display: flex;
   justify-content: space-between;
@@ -60,9 +207,19 @@ h2{text-align:center;color:#2D1B69;margin:0 0 .5rem}
 .download-btn:hover {
   background: #2563eb;
 }
-.table-scroll{overflow:auto}
-.table{width:100%;border-collapse:collapse}
-.table th,.table td{text-align:left;padding:.75rem;border-top:1px solid #f3f4f6}
+.table-scroll {
+  overflow: auto;
+}
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.table th,
+.table td {
+  text-align: left;
+  padding: 0.75rem;
+  border-top: 1px solid #f3f4f6;
+}
 
 /* ApexChart container styling for uniform card heights */
 apx-chart {
@@ -82,15 +239,15 @@ apx-chart {
   .charts-row {
     grid-template-columns: 1fr;
   }
-  
+
   .card {
     min-height: 380px;
   }
-  
+
   .card:nth-child(2) {
     min-height: 200px;
   }
-  
+
   .combined-sections {
     gap: 1rem;
   }
@@ -101,28 +258,28 @@ apx-chart {
     grid-template-columns: 1fr;
     gap: 1rem;
   }
-  
+
   .card {
     min-height: 350px;
   }
-  
+
   .card:nth-child(2) {
     min-height: 180px;
   }
-  
+
   .combined-sections {
     grid-template-columns: 1fr;
     gap: 1.5rem;
   }
-  
+
   .tru-time .row {
     grid-template-columns: 120px 1fr auto;
   }
-  
+
   .tru-time {
     flex: 0 0 auto;
   }
-  
+
   .coverage-item {
     grid-template-columns: 80px 1fr auto;
   }

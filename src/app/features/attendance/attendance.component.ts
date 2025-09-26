@@ -2,6 +2,7 @@ import { Component, signal, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AttendanceService } from '../../services/attendance.service';
 import { EmployeeService } from '../../services/employee.service';
+import { AuthService } from '../../services/auth.service';
 import { Attendance } from '../../models/attendance.model';
 
 @Component({
@@ -9,7 +10,7 @@ import { Attendance } from '../../models/attendance.model';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './attendance.component.html',
-  styleUrls: ['./attendance.component.css']
+  styleUrls: ['./attendance.component.css'],
 })
 export class AttendanceComponent implements OnInit, OnDestroy {
   now = signal(new Date());
@@ -18,9 +19,14 @@ export class AttendanceComponent implements OnInit, OnDestroy {
 
   constructor(
     private attendanceService: AttendanceService,
-    private employeeService: EmployeeService
+    private employeeService: EmployeeService,
+    private authService: AuthService
   ) {
-    this.currentEmployee = this.employeeService.getCurrentUser();
+    // Get the currently authenticated user
+    const currentUserId = this.authService.getCurrentEmployeeId();
+    this.currentEmployee = currentUserId
+      ? this.employeeService.getEmployee(currentUserId)
+      : null;
   }
 
   ngOnInit() {
@@ -32,7 +38,9 @@ export class AttendanceComponent implements OnInit, OnDestroy {
   }
 
   isClockedIn(): boolean {
-    return this.currentEmployee ? this.attendanceService.isClockedIn(this.currentEmployee.EmployeeID) : false;
+    return this.currentEmployee
+      ? this.attendanceService.isClockedIn(this.currentEmployee.EmployeeID)
+      : false;
   }
 
   getAttendanceRecords(): Attendance[] {
@@ -40,7 +48,11 @@ export class AttendanceComponent implements OnInit, OnDestroy {
   }
 
   getTodayAttendance(): Attendance | undefined {
-    return this.currentEmployee ? this.attendanceService.getTodayAttendance(this.currentEmployee.EmployeeID) : undefined;
+    return this.currentEmployee
+      ? this.attendanceService.getTodayAttendance(
+          this.currentEmployee.EmployeeID
+        )
+      : undefined;
   }
 
   toggleClock(): void {
@@ -61,5 +73,3 @@ export class AttendanceComponent implements OnInit, OnDestroy {
     return new Date(timeString).toLocaleDateString();
   }
 }
-
-

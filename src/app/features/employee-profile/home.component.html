@@ -1,7 +1,12 @@
 <header class="nav">
   <div class="spacer"></div>
   <nav>
-    <a routerLink="/employee-profile" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">Home</a>
+    <a
+      routerLink="/employee-profile"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: true }"
+      >Home</a
+    >
     <a (click)="viewProfile('E1001')">My Profile</a>
     <a routerLink="/login">Logout</a>
   </nav>
@@ -13,12 +18,13 @@
     <div class="title">{{ e.Name }}</div>
     <div class="sub">{{ e.Designation || e.Role }} · {{ e.Department }}</div>
     <div class="actions">
-      <button class="btn" (click)="viewProfile(e.EmployeeID)">View Profile</button>
-      <button class="btn primary" (click)="editProfile(e.EmployeeID)">Edit Profile</button>
+      <button class="btn" (click)="viewProfile(e.EmployeeID)">
+        View Profile
+      </button>
+      <button class="btn primary" (click)="editProfile(e.EmployeeID)">
+        Edit Profile
+      </button>
     </div>
   </div>
   <div *ngIf="!list.length" class="empty">No employees found.</div>
-  
 </section>
-
-

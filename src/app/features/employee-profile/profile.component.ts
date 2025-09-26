@@ -10,18 +10,21 @@ import { Employee } from '../../models/employee.model';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './profile.component.html',
-  styleUrls: ['./profile.component.css']
+  styleUrls: ['./profile.component.css'],
 })
 export class EmployeeProfileComponent {
   emp?: Employee;
 
   constructor(
-    private route: ActivatedRoute, 
-    private router: Router, 
+    private route: ActivatedRoute,
+    private router: Router,
     private employees: EmployeeService,
     private auth: AuthService
   ) {
-    const id = this.route.snapshot.paramMap.get('id') || this.auth.getCurrentEmployeeId() || 'E1001';
+    const id =
+      this.route.snapshot.paramMap.get('id') ||
+      this.auth.getCurrentEmployeeId() ||
+      'E1001';
     this.emp = this.employees.getEmployee(id);
   }
 
@@ -30,5 +33,3 @@ export class EmployeeProfileComponent {
     this.router.navigate(['/employee-profile/edit', this.emp.EmployeeID]);
   }
 }
-
-

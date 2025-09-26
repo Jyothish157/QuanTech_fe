@@ -3,21 +3,21 @@
 
   <!-- KPI Row -->
   <div class="kpi-row">
-    <div class="kpi" style="--c:#58C4A8">
+    <div class="kpi" style="--c: #58c4a8">
       <div class="icon">📈</div>
       <div class="meta">
         <div class="title">Average Work Hours</div>
         <div class="value">{{ averageWorkHours }}h</div>
       </div>
     </div>
-    <div class="kpi" style="--c:#4F46E5">
+    <div class="kpi" style="--c: #4f46e5">
       <div class="icon">✅</div>
       <div class="meta">
         <div class="title">Approved Leaves</div>
         <div class="value">{{ approvedLeaveRequests }}</div>
       </div>
     </div>
-    <div class="kpi" style="--c:#F59E0B">
+    <div class="kpi" style="--c: #f59e0b">
       <div class="icon">⏳</div>
       <div class="meta">
         <div class="title">Pending Leaves</div>
@@ -54,13 +54,18 @@
             [dataLabels]="pieChartOptions['dataLabels']"
           ></apx-chart>
         </div>
-        
+
         <div class="section">
           <div class="card-title">Shift Coverage</div>
           <div class="shift-coverage">
             <div class="coverage-item" *ngFor="let coverage of shiftCoverage">
               <div class="coverage-label">{{ coverage.shift }}</div>
-              <div class="coverage-bar"><div class="coverage-fill" [style.width.%]="coverage.coverage"></div></div>
+              <div class="coverage-bar">
+                <div
+                  class="coverage-fill"
+                  [style.width.%]="coverage.coverage"
+                ></div>
+              </div>
               <div class="coverage-value">{{ coverage.coverage }}%</div>
             </div>
           </div>
@@ -74,9 +79,18 @@
         <div class="row" *ngFor="let emp of getEmployees()">
           <span class="name">{{ getEmployeeName(emp.EmployeeID) }}</span>
           <div class="bar-wrap">
-            <div class="bar-fill" [style.width.%]="(getEmployeeAverageHours(emp.EmployeeID) * 12.5) > 100 ? 100 : (getEmployeeAverageHours(emp.EmployeeID) * 12.5)"></div>
+            <div
+              class="bar-fill"
+              [style.width.%]="
+                getEmployeeAverageHours(emp.EmployeeID) * 12.5 > 100
+                  ? 100
+                  : getEmployeeAverageHours(emp.EmployeeID) * 12.5
+              "
+            ></div>
           </div>
-          <span class="hrs">{{ getEmployeeAverageHours(emp.EmployeeID) }}h</span>
+          <span class="hrs"
+            >{{ getEmployeeAverageHours(emp.EmployeeID) }}h</span
+          >
         </div>
       </div>
     </div>
@@ -108,7 +122,7 @@
         </thead>
         <tbody>
           <tr *ngFor="let employee of getEmployees(); let i = index">
-            <td>{{ 'RPT' + (i+1) }}</td>
+            <td>{{ 'RPT' + (i + 1) }}</td>
             <td>{{ employee.EmployeeID }}</td>
             <td>{{ getEmployeeName(employee.EmployeeID) }}</td>
             <td>{{ getEmployeeAttendanceDays(employee.EmployeeID) }}</td>

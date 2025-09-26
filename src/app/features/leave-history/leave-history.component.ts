@@ -14,7 +14,7 @@ type LeaveHistoryRow = {
   standalone: true,
   imports: [CommonModule],
   templateUrl: './leave-history.component.html',
-  styleUrls: ['./leave-history.component.css']
+  styleUrls: ['./leave-history.component.css'],
 })
 export class LeaveHistoryComponent {
   rows: LeaveHistoryRow[] = [
@@ -28,9 +28,16 @@ export class LeaveHistoryComponent {
 
   downloadCsv(): void {
     const header = ['Date', 'Type', 'Days', 'Status'];
-    const lines = [header.join(','), ...this.rows.map(r => [r.date, r.type, String(r.days), r.status].join(','))];
-    this.download.downloadText(lines.join('\n'), 'leave-history.csv', 'text/csv;charset=utf-8');
+    const lines = [
+      header.join(','),
+      ...this.rows.map((r) =>
+        [r.date, r.type, String(r.days), r.status].join(',')
+      ),
+    ];
+    this.download.downloadText(
+      lines.join('\n'),
+      'leave-history.csv',
+      'text/csv;charset=utf-8'
+    );
   }
 }
-
-

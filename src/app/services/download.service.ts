@@ -4,8 +4,14 @@ import autoTable from 'jspdf-autotable';
 
 @Injectable({ providedIn: 'root' })
 export class DownloadService {
-  downloadBlob(content: BlobPart | BlobPart[], filename: string, mime = 'application/octet-stream'): void {
-    const blob = new Blob(Array.isArray(content) ? content : [content], { type: mime });
+  downloadBlob(
+    content: BlobPart | BlobPart[],
+    filename: string,
+    mime = 'application/octet-stream'
+  ): void {
+    const blob = new Blob(Array.isArray(content) ? content : [content], {
+      type: mime,
+    });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
@@ -14,7 +20,11 @@ export class DownloadService {
     URL.revokeObjectURL(url);
   }
 
-  downloadText(text: string, filename: string, mime = 'text/plain;charset=utf-8'): void {
+  downloadText(
+    text: string,
+    filename: string,
+    mime = 'text/plain;charset=utf-8'
+  ): void {
     this.downloadBlob(text, filename, mime);
   }
 
@@ -31,7 +41,7 @@ export class DownloadService {
     // Add table
     autoTable(doc, {
       head: [Object.keys(data[0])],
-      body: data.map(obj => Object.values(obj)),
+      body: data.map((obj) => Object.values(obj)),
       startY: 30,
       styles: {
         fontSize: 8,
@@ -54,5 +64,3 @@ export class DownloadService {
     doc.save(`${finalTitle}.pdf`);
   }
 }
-
-

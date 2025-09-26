@@ -12,21 +12,75 @@ import { LeaveBalance } from '../../models/leave.model';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './leave-balance.component.html',
-  styleUrls: ['./leave-balance.component.css']
+  styleUrls: ['./leave-balance.component.css'],
 })
 export class LeaveBalanceComponent {
   currentEmployee: any;
 
   // Enhanced dummy history data
-  historyRows: { dateRange: string; type: string; days: number; status: 'Approved' | 'Rejected' | 'Pending'; reason: string }[] = [
-    { dateRange: 'Dec 20 - Dec 31, 2024', type: 'Vacation Leave', days: 10, status: 'Approved', reason: 'Year-end holidays' },
-    { dateRange: 'Nov 15 - Nov 15, 2024', type: 'Sick Leave', days: 1, status: 'Approved', reason: 'Medical appointment' },
-    { dateRange: 'Oct 05 - Oct 06, 2024', type: 'Casual Leave', days: 2, status: 'Approved', reason: 'Personal work' },
-    { dateRange: 'Sep 23 - Sep 25, 2024', type: 'Sick Leave', days: 3, status: 'Approved', reason: 'Fever and flu' },
-    { dateRange: 'Aug 10 - Aug 12, 2024', type: 'Vacation Leave', days: 3, status: 'Rejected', reason: 'Project deadline conflict' },
-    { dateRange: 'Jul 22 - Jul 23, 2024', type: 'Casual Leave', days: 2, status: 'Approved', reason: 'Family event' },
-    { dateRange: 'Jun 15 - Jun 17, 2024', type: 'Sick Leave', days: 3, status: 'Approved', reason: 'Medical treatment' },
-    { dateRange: 'May 20 - May 31, 2024', type: 'Vacation Leave', days: 12, status: 'Approved', reason: 'Summer vacation' }
+  historyRows: {
+    dateRange: string;
+    type: string;
+    days: number;
+    status: 'Approved' | 'Rejected' | 'Pending';
+    reason: string;
+  }[] = [
+    {
+      dateRange: 'Dec 20 - Dec 31, 2024',
+      type: 'Vacation Leave',
+      days: 10,
+      status: 'Approved',
+      reason: 'Year-end holidays',
+    },
+    {
+      dateRange: 'Nov 15 - Nov 15, 2024',
+      type: 'Sick Leave',
+      days: 1,
+      status: 'Approved',
+      reason: 'Medical appointment',
+    },
+    {
+      dateRange: 'Oct 05 - Oct 06, 2024',
+      type: 'Casual Leave',
+      days: 2,
+      status: 'Approved',
+      reason: 'Personal work',
+    },
+    {
+      dateRange: 'Sep 23 - Sep 25, 2024',
+      type: 'Sick Leave',
+      days: 3,
+      status: 'Approved',
+      reason: 'Fever and flu',
+    },
+    {
+      dateRange: 'Aug 10 - Aug 12, 2024',
+      type: 'Vacation Leave',
+      days: 3,
+      status: 'Rejected',
+      reason: 'Project deadline conflict',
+    },
+    {
+      dateRange: 'Jul 22 - Jul 23, 2024',
+      type: 'Casual Leave',
+      days: 2,
+      status: 'Approved',
+      reason: 'Family event',
+    },
+    {
+      dateRange: 'Jun 15 - Jun 17, 2024',
+      type: 'Sick Leave',
+      days: 3,
+      status: 'Approved',
+      reason: 'Medical treatment',
+    },
+    {
+      dateRange: 'May 20 - May 31, 2024',
+      type: 'Vacation Leave',
+      days: 12,
+      status: 'Approved',
+      reason: 'Summer vacation',
+    },
   ];
 
   constructor(
@@ -41,28 +95,36 @@ export class LeaveBalanceComponent {
   }
 
   get balances(): LeaveBalance[] {
-    return this.currentEmployee ? 
-      this.leaveService.getLeaveBalance(this.currentEmployee.EmployeeID) : [];
+    return this.currentEmployee
+      ? this.leaveService.getLeaveBalance(this.currentEmployee.EmployeeID)
+      : [];
   }
 
   getTotalBalance(): number {
-    return this.balances.reduce((total, balance) => total + balance.BalanceDays, 0);
+    return this.balances.reduce(
+      (total, balance) => total + balance.BalanceDays,
+      0
+    );
   }
 
   getMaxBalance(): number {
-    return Math.max(...this.balances.map(b => b.BalanceDays), 20);
+    return Math.max(...this.balances.map((b) => b.BalanceDays), 20);
   }
 
   getBalanceFor(type: string): number {
-    const found = this.balances.find(b => b.LeaveType === type);
+    const found = this.balances.find((b) => b.LeaveType === type);
     if (found) return found.BalanceDays;
-    
+
     // Default values for demo purposes
-    switch(type) {
-      case 'Sick': return 8;
-      case 'Casual': return 10;
-      case 'Vacation': return 13;
-      default: return 0;
+    switch (type) {
+      case 'Sick':
+        return 8;
+      case 'Casual':
+        return 10;
+      case 'Vacation':
+        return 13;
+      default:
+        return 0;
     }
   }
 
@@ -75,18 +137,33 @@ export class LeaveBalanceComponent {
 
   // Calculate percentage for CSS conic-gradient
   getSickPercent(): number {
-    const total = this.getBalanceFor('Sick') + this.getBalanceFor('Casual') + this.getBalanceFor('Vacation');
-    return total > 0 ? Math.round((this.getBalanceFor('Sick') / total) * 100) : 33;
+    const total =
+      this.getBalanceFor('Sick') +
+      this.getBalanceFor('Casual') +
+      this.getBalanceFor('Vacation');
+    return total > 0
+      ? Math.round((this.getBalanceFor('Sick') / total) * 100)
+      : 33;
   }
 
   getCasualPercent(): number {
-    const total = this.getBalanceFor('Sick') + this.getBalanceFor('Casual') + this.getBalanceFor('Vacation');
-    return total > 0 ? Math.round((this.getBalanceFor('Casual') / total) * 100) : 33;
+    const total =
+      this.getBalanceFor('Sick') +
+      this.getBalanceFor('Casual') +
+      this.getBalanceFor('Vacation');
+    return total > 0
+      ? Math.round((this.getBalanceFor('Casual') / total) * 100)
+      : 33;
   }
 
   getVacationPercent(): number {
-    const total = this.getBalanceFor('Sick') + this.getBalanceFor('Casual') + this.getBalanceFor('Vacation');
-    return total > 0 ? Math.round((this.getBalanceFor('Vacation') / total) * 100) : 34;
+    const total =
+      this.getBalanceFor('Sick') +
+      this.getBalanceFor('Casual') +
+      this.getBalanceFor('Vacation');
+    return total > 0
+      ? Math.round((this.getBalanceFor('Vacation') / total) * 100)
+      : 34;
   }
 
   goToLeaveRequest(): void {
@@ -98,8 +175,11 @@ export class LeaveBalanceComponent {
   }
 
   openCompanyPolicy(): void {
-    // Create dummy PDF content and download
-    this.downloadDummyPDF('leave_policy.pdf', 'Company Leave Policy');
+    // Download the actual company policy PDF
+    this.downloadActualPDF(
+      'assets/QuanTech Employee Leave Policy.pdf',
+      'QuanTech_Employee_Leave_Policy.pdf'
+    );
   }
 
   downloadReport(): void {
@@ -107,10 +187,36 @@ export class LeaveBalanceComponent {
     this.downloadDummyPDF('leave_report.pdf', 'Leave Report 2025');
   }
 
+  private downloadActualPDF(assetPath: string, downloadFilename: string): void {
+    // Download the actual PDF file from assets
+    fetch(assetPath)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('PDF file not found');
+        }
+        return response.blob();
+      })
+      .then((blob) => {
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = downloadFilename;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
+      })
+      .catch((error) => {
+        console.error('Error downloading PDF:', error);
+        // Fallback to dummy PDF if the actual file is not found
+        this.downloadDummyPDF(downloadFilename, 'Company Leave Policy');
+      });
+  }
+
   private downloadDummyPDF(filename: string, title: string): void {
     // Create a simple text content for the dummy PDF
     const content = `${title}\n\nGenerated on: ${new Date().toLocaleDateString()}\n\nThis is a dummy ${title.toLowerCase()} file for demonstration purposes.\n\nLeave Balance Summary:\n- Sick Leave: ${this.getBalanceFor('Sick')} days\n- Casual Leave: ${this.getBalanceFor('Casual')} days\n- Vacation Leave: ${this.getBalanceFor('Vacation')} days\n\nTotal Available: ${this.getBalanceFor('Sick') + this.getBalanceFor('Casual') + this.getBalanceFor('Vacation')} days`;
-    
+
     // Create a blob and download it as a text file (simulating PDF download)
     const blob = new Blob([content], { type: 'application/pdf' });
     const url = window.URL.createObjectURL(blob);
@@ -129,5 +235,3 @@ export class LeaveBalanceComponent {
     // In a real app, you would call the service to refresh data
   }
 }
-
-

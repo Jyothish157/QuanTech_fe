@@ -5,14 +5,26 @@
   </header>
 
   <div class="grid">
-    <div class="row"><span>Employee ID</span><strong>{{ e.EmployeeID }}</strong></div>
-    <div class="row"><span>Email</span><strong>{{ e.Email || '-' }}</strong></div>
-    <div class="row"><span>Phone</span><strong>{{ e.Phone || '-' }}</strong></div>
-    <div class="row"><span>Department</span><strong>{{ e.Department }}</strong></div>
-    <div class="row"><span>Designation</span><strong>{{ e.Designation || e.Role }}</strong></div>
-    <div class="row"><span>Date of Birth</span><strong>{{ e.DOB || '-' }}</strong></div>
-    <div class="row full"><span>Address</span><strong>{{ e.Address || '-' }}</strong></div>
+    <div class="row">
+      <span>Employee ID</span><strong>{{ e.EmployeeID }}</strong>
+    </div>
+    <div class="row">
+      <span>Email</span><strong>{{ e.Email || '-' }}</strong>
+    </div>
+    <div class="row">
+      <span>Phone</span><strong>{{ e.Phone || '-' }}</strong>
+    </div>
+    <div class="row">
+      <span>Department</span><strong>{{ e.Department }}</strong>
+    </div>
+    <div class="row">
+      <span>Designation</span><strong>{{ e.Designation || e.Role }}</strong>
+    </div>
+    <div class="row">
+      <span>Date of Birth</span><strong>{{ e.DOB || '-' }}</strong>
+    </div>
+    <div class="row full">
+      <span>Address</span><strong>{{ e.Address || '-' }}</strong>
+    </div>
   </div>
 </section>
-
-

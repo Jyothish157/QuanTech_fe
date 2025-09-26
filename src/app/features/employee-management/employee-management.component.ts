@@ -9,7 +9,7 @@ import { Employee } from '../../models/employee.model';
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './employee-management.component.html',
-  styleUrls: ['./employee-management.component.css']
+  styleUrls: ['./employee-management.component.css'],
 })
 export class EmployeeManagementComponent implements OnInit {
   employees: Employee[] = [];
@@ -17,13 +17,13 @@ export class EmployeeManagementComponent implements OnInit {
   searchTerm = '';
   showAddForm = false;
   editingEmployee: Employee | null = null;
-  
+
   newEmployee: Partial<Employee> = {
     EmployeeID: '',
     Name: '',
     Department: '',
     Email: '',
-    Role: 'Employee'
+    Role: 'Employee',
   };
 
   constructor(private employeeService: EmployeeService) {}
@@ -60,9 +60,9 @@ export class EmployeeManagementComponent implements OnInit {
         Email: this.newEmployee.Email,
         Role: this.newEmployee.Role!,
         Username: this.newEmployee.Username || this.generateUsername(),
-        Password: this.newEmployee.Password || this.generatePassword()
+        Password: this.newEmployee.Password || this.generatePassword(),
       };
-      
+
       this.employeeService.addEmployee(employee);
       this.loadEmployees();
       this.resetForm();
@@ -84,10 +84,13 @@ export class EmployeeManagementComponent implements OnInit {
         Email: this.newEmployee.Email,
         Role: this.newEmployee.Role!,
         Username: this.newEmployee.Username,
-        Password: this.newEmployee.Password
+        Password: this.newEmployee.Password,
       };
-      
-      this.employeeService.updateEmployee(this.editingEmployee.EmployeeID, updatedEmployee);
+
+      this.employeeService.updateEmployee(
+        this.editingEmployee.EmployeeID,
+        updatedEmployee
+      );
       this.loadEmployees();
       this.resetForm();
     }
@@ -106,7 +109,7 @@ export class EmployeeManagementComponent implements OnInit {
       Name: '',
       Department: '',
       Email: '',
-      Role: 'Employee'
+      Role: 'Employee',
     };
     this.editingEmployee = null;
     this.showAddForm = false;
@@ -117,19 +120,25 @@ export class EmployeeManagementComponent implements OnInit {
   }
 
   generateEmployeeId(): string {
-    const lastId = this.employees.length > 0 ? 
-      Math.max(...this.employees.map(e => parseInt(e.EmployeeID.substring(1)))) : 1000;
+    const lastId =
+      this.employees.length > 0
+        ? Math.max(
+            ...this.employees.map((e) => parseInt(e.EmployeeID.substring(1)))
+          )
+        : 1000;
     return `E${lastId + 1}`;
   }
 
   generateUsername(): string {
-    const name = this.newEmployee.Name?.toLowerCase().replace(/\s+/g, '') || 'user';
+    const name =
+      this.newEmployee.Name?.toLowerCase().replace(/\s+/g, '') || 'user';
     const randomNum = Math.floor(Math.random() * 1000);
     return `${name}${randomNum}`;
   }
 
   generatePassword(): string {
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const chars =
+      'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     let password = '';
     for (let i = 0; i < 8; i++) {
       password += chars.charAt(Math.floor(Math.random() * chars.length));

@@ -11,7 +11,7 @@ import { Shift, ShiftSwapRequest } from '../../models/shift.model';
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './shifts.component.html',
-  styleUrls: ['./shifts.component.css']
+  styleUrls: ['./shifts.component.css'],
 })
 export class ShiftsComponent {
   currentEmployee: any;
@@ -22,7 +22,7 @@ export class ShiftsComponent {
   newShift = {
     employeeId: '',
     date: '',
-    shiftType: 'Morning' as const
+    shiftType: 'Morning' as const,
   };
 
   constructor(
@@ -30,13 +30,18 @@ export class ShiftsComponent {
     private employeeService: EmployeeService,
     private auth: AuthService
   ) {
-    this.currentEmployee = this.employeeService.getCurrentUser();
+    // Get the currently authenticated user
+    const currentUserId = this.auth.getCurrentEmployeeId();
+    this.currentEmployee = currentUserId
+      ? this.employeeService.getEmployee(currentUserId)
+      : null;
     this.isManager = this.auth.currentUser()?.role === 'manager';
   }
 
   get shifts(): Shift[] {
-    return this.currentEmployee ? 
-      this.shiftService.getEmployeeShifts(this.currentEmployee.EmployeeID) : [];
+    return this.currentEmployee
+      ? this.shiftService.getEmployeeShifts(this.currentEmployee.EmployeeID)
+      : [];
   }
 
   get allShifts(): Shift[] {
@@ -48,7 +53,7 @@ export class ShiftsComponent {
   }
 
   get pendingSwapRequests(): ShiftSwapRequest[] {
-    return this.swapRequests.filter(r => r.Status === 'Pending');
+    return this.swapRequests.filter((r) => r.Status === 'Pending');
   }
 
   requestSwap(): void {
@@ -63,13 +68,13 @@ export class ShiftsComponent {
 
     this.message = `Swap request submitted for ${this.swap.date}: ${this.swap.from} → ${this.swap.to}`;
     this.swap = { date: '', from: 'Morning', to: 'Evening' };
-    
-    setTimeout(() => this.message = '', 3000);
+
+    setTimeout(() => (this.message = ''), 3000);
   }
 
   createShift(): void {
     if (!this.isManager) return;
-    
+
     this.shiftService.assignShift(
       this.newShift.employeeId,
       this.newShift.date,
@@ -80,10 +85,10 @@ export class ShiftsComponent {
     this.newShift = {
       employeeId: '',
       date: '',
-      shiftType: 'Morning'
+      shiftType: 'Morning',
     };
-    
-    setTimeout(() => this.message = '', 3000);
+
+    setTimeout(() => (this.message = ''), 3000);
   }
 
   approveSwap(swapId: string): void {
@@ -101,5 +106,3 @@ export class ShiftsComponent {
     return employee ? employee.Name : employeeId;
   }
 }
-
-

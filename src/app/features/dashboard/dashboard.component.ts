@@ -12,14 +12,14 @@ import { EmployeeService } from '../../services/employee.service';
   standalone: true,
   imports: [RouterLink, CommonModule],
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.css']
+  styleUrls: ['./dashboard.component.css'],
 })
 export class DashboardComponent {
   currentEmployee: any;
   isManager = false;
 
   constructor(
-    private auth: AuthService, 
+    private auth: AuthService,
     private router: Router,
     private attendanceService: AttendanceService,
     private leaveService: LeaveService,
@@ -31,75 +31,159 @@ export class DashboardComponent {
     this.isManager = this.auth.currentUser()?.role === 'manager';
   }
 
-  logout(){
+  logout() {
     const ok = window.confirm('Are you sure you want to logout?');
-    if(!ok) return;
+    if (!ok) return;
     this.auth.logout();
     this.router.navigate(['/login']);
   }
 
   get todayAttendancePercentage(): number {
     const today = new Date().toISOString().split('T')[0];
-    const todayAttendance = this.attendanceService.getAttendance().filter(a => 
-      a.ClockInTime.startsWith(today)
-    );
+    const todayAttendance = this.attendanceService
+      .getAttendance()
+      .filter((a) => a.ClockInTime.startsWith(today));
     const totalEmployees = this.employeeService.getEmployees().length;
-    return totalEmployees > 0 ? Math.round((todayAttendance.length / totalEmployees) * 100) : 0;
+    return totalEmployees > 0
+      ? Math.round((todayAttendance.length / totalEmployees) * 100)
+      : 0;
   }
 
   get pendingLeaveRequests(): number {
-    return this.leaveService.getLeaveRequests().filter(l => l.Status === 'Pending').length;
+    const allPendingRequests = this.leaveService
+      .getLeaveRequests()
+      .filter((l) => l.Status === 'Pending');
+
+    if (this.isManager) {
+      // Managers see all pending requests
+      return allPendingRequests.length;
+    } else {
+      // Employees see only their own pending requests
+      const currentEmployeeId = this.currentEmployee?.EmployeeID;
+      return currentEmployeeId 
+        ? allPendingRequests.filter(l => l.EmployeeID === currentEmployeeId).length
+        : 0;
+    }
   }
 
   get shiftCoveragePercentage(): number {
     const totalShifts = this.shiftService.getShifts().length;
     const totalEmployees = this.employeeService.getEmployees().length;
     const expectedShifts = totalEmployees * 7; // 7 days
-    return expectedShifts > 0 ? Math.round((totalShifts / expectedShifts) * 100) : 0;
+    return expectedShifts > 0
+      ? Math.round((totalShifts / expectedShifts) * 100)
+      : 0;
   }
 
   get isClockedIn(): boolean {
-    return this.currentEmployee ? this.attendanceService.isClockedIn(this.currentEmployee.EmployeeID) : false;
+    return this.currentEmployee
+      ? this.attendanceService.isClockedIn(this.currentEmployee.EmployeeID)
+      : false;
   }
 
   get recentActivity(): string[] {
     const activities = [];
-    
-    // Check for recent leave requests
-    const recentLeaves = this.leaveService.getLeaveRequests()
-      .filter(l => l.Status === 'Pending')
-      .slice(0, 2);
-    
-    recentLeaves.forEach(leave => {
-      const employee = this.employeeService.getEmployee(leave.EmployeeID);
-      if (employee) {
-        activities.push(`${employee.Name} submitted a ${leave.LeaveType} leave request`);
-      }
-    });
+    const currentEmployeeId = this.currentEmployee?.EmployeeID;
 
-    // Check for recent shift swaps
-    const recentSwaps = this.shiftService.getSwapRequests()
-      .filter(s => s.Status === 'Approved')
-      .slice(0, 1);
-    
-    recentSwaps.forEach(swap => {
-      const employee = this.employeeService.getEmployee(swap.EmployeeID);
-      if (employee) {
-        activities.push(`Shift swap approved for ${employee.Name}`);
-      }
-    });
+    if (this.isManager) {
+      // Managers see all employees' activities
+      // Check for recent approved leave requests
+      const recentApprovedLeaves = this.leaveService
+        .getLeaveRequests()
+        .filter((l) => l.Status === 'Approved')
+        .slice(0, 2);
 
-    // Add attendance sync activity
-    activities.push('Attendance synced at ' + new Date().toLocaleTimeString());
+      recentApprovedLeaves.forEach((leave) => {
+        const employee = this.employeeService.getEmployee(leave.EmployeeID);
+        if (employee) {
+          activities.push(
+            `${employee.Name}'s ${leave.LeaveType} leave request was approved`
+          );
+        }
+      });
+
+      // Check for recent pending leave requests
+      const recentPendingLeaves = this.leaveService
+        .getLeaveRequests()
+        .filter((l) => l.Status === 'Pending')
+        .slice(0, 1);
+
+      recentPendingLeaves.forEach((leave) => {
+        const employee = this.employeeService.getEmployee(leave.EmployeeID);
+        if (employee) {
+          activities.push(
+            `${employee.Name} submitted a ${leave.LeaveType} leave request`
+          );
+        }
+      });
+
+      // Check for recent shift swaps
+      const recentSwaps = this.shiftService
+        .getSwapRequests()
+        .filter((s) => s.Status === 'Approved')
+        .slice(0, 1);
+
+      recentSwaps.forEach((swap) => {
+        const employee = this.employeeService.getEmployee(swap.EmployeeID);
+        if (employee) {
+          activities.push(`Shift swap approved for ${employee.Name}`);
+        }
+      });
+    } else {
+      // Employees see only their own activities
+      if (currentEmployeeId) {
+        // Check for current employee's recent leave requests
+        const myLeaveRequests = this.leaveService
+          .getLeaveRequests()
+          .filter((l) => l.EmployeeID === currentEmployeeId)
+          .slice(0, 2);
+
+        myLeaveRequests.forEach((leave) => {
+          const statusText = leave.Status === 'Pending' 
+            ? 'submitted' 
+            : leave.Status === 'Approved' 
+            ? 'approved' 
+            : 'rejected';
+          activities.push(
+            `Your ${leave.LeaveType} leave request was ${statusText}`
+          );
+        });
+
+        // Check for current employee's shift swap requests
+        const myShiftSwaps = this.shiftService
+          .getSwapRequests()
+          .filter((s) => s.EmployeeID === currentEmployeeId)
+          .slice(0, 1);
+
+        myShiftSwaps.forEach((swap) => {
+          const statusText = swap.Status === 'Pending'
+            ? 'is pending approval'
+            : swap.Status === 'Approved'
+            ? 'was approved'
+            : 'was rejected';
+          activities.push(`Your shift swap request ${statusText}`);
+        });
+
+        // Check if clocked in today
+        if (this.isClockedIn) {
+          activities.push('You are currently clocked in');
+        }
+      }
+    }
+
+    // Add attendance sync activity as fallback if no other activities
+    if (activities.length === 0) {
+      activities.push('Attendance synced at ' + new Date().toLocaleTimeString());
+    }
 
     return activities.slice(0, 3);
   }
 
   getTodayAttendanceCount(): number {
     const today = new Date().toISOString().split('T')[0];
-    return this.attendanceService.getAttendance().filter(a => 
-      a.ClockInTime.startsWith(today)
-    ).length;
+    return this.attendanceService
+      .getAttendance()
+      .filter((a) => a.ClockInTime.startsWith(today)).length;
   }
 
   getTotalEmployees(): number {
@@ -110,5 +194,3 @@ export class DashboardComponent {
     return this.shiftService.getShifts().length;
   }
 }
-
-

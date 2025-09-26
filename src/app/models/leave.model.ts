@@ -15,5 +15,3 @@ export interface LeaveBalance {
   LeaveType: LeaveType;
   BalanceDays: number;
 }
-
-

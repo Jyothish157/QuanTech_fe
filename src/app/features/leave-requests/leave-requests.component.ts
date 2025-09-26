@@ -11,7 +11,7 @@ import { LeaveType, LeaveRequest } from '../../models/leave.model';
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './leave-requests.component.html',
-  styleUrls: ['./leave-requests.component.css']
+  styleUrls: ['./leave-requests.component.css'],
 })
 export class LeaveRequestsComponent {
   types: LeaveType[] = ['Sick', 'Vacation', 'Casual'];
@@ -34,12 +34,15 @@ export class LeaveRequestsComponent {
   }
 
   get myRequests(): LeaveRequest[] {
-    return this.currentEmployee ? 
-      this.requests.filter(r => r.EmployeeID === this.currentEmployee!.EmployeeID) : [];
+    return this.currentEmployee
+      ? this.requests.filter(
+          (r) => r.EmployeeID === this.currentEmployee!.EmployeeID
+        )
+      : [];
   }
 
   get pendingRequests(): LeaveRequest[] {
-    return this.requests.filter(r => r.Status === 'Pending');
+    return this.requests.filter((r) => r.Status === 'Pending');
   }
 
   submit(): void {
@@ -60,7 +63,7 @@ export class LeaveRequestsComponent {
       this.message = 'Insufficient leave balance for this request.';
     }
 
-    setTimeout(() => this.message = '', 3000);
+    setTimeout(() => (this.message = ''), 3000);
   }
 
   approveRequest(leaveId: string): void {
@@ -84,5 +87,3 @@ export class LeaveRequestsComponent {
     return employee ? employee.Name : employeeId;
   }
 }
-
-
